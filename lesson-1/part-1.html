@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Розв'язання задачі з фізики</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Times+New+Roman:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+        }
+
+        .math-text {
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /* Fraction CSS layout for math equations without MathML */
+        .frac {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            padding: 0 4px;
+            line-height: 1.1;
+        }
+
+        .frac .num {
+            border-bottom: 2px solid currentColor;
+            padding-bottom: 2px;
+            display: block;
+        }
+
+        .frac .den {
+            padding-top: 2px;
+            display: block;
+        }
+
+        /* Bracket wrapper around fractions */
+        .bracket-frac {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* Custom step transition effects */
+        .step-item {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-hidden {
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+            visibility: hidden;
+        }
+
+        .step-visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            visibility: visible;
+        }
+
+        /* Custom highlight for the newest revealed element */
+        .step-highlight {
+            animation: pulseGlow 1.2s ease-out;
+        }
+
+        @keyframes pulseGlow {
+            0% { background-color: rgba(59, 130, 246, 0.25); border-radius: 0.375rem; }
+            100% { background-color: transparent; }
+        }
+
+        /* Print styles for PDF export */
+        @media print {
+            header, footer, #exportDropdownMenu {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            main {
+                cursor: default !important;
+            }
+            .step-item {
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+                color: black !important;
+            }
+            .bg-slate-900\/90 {
+                background: white !important;
+                border: 2px solid #000 !important;
+                box-shadow: none !important;
+                color: black !important;
+            }
+            .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400 {
+                color: black !important;
+            }
+            .border-slate-500, .border-slate-700, .border-slate-800 {
+                border-color: #000 !important;
+            }
+            .frac .num {
+                border-bottom: 2px solid #000 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between overflow-hidden">
+
+    <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 sm:px-8 flex items-center justify-between shadow-lg relative z-20">
+        <div class="flex items-center space-x-3">
+            <span class="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></span>
+            <h1 class="text-base sm:text-lg font-semibold text-slate-200">Фізика: Інтерактивний розв'язок задачі</h1>
+        </div>
+        
+        <!-- Step indicator badge & Export options -->
+        <div class="flex items-center space-x-3">
+            <!-- Download Dropdown -->
+            <div class="relative">
+                <button id="exportBtn" class="flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors shadow-md">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    <span>Завантажити</span>
+                    <svg class="w-3.5 h-3.5 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div id="exportDropdownMenu" class="hidden absolute right-0 mt-2 w-56 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl py-2 text-sm z-50">
+                    <button id="downloadPPTXBtn" class="w-full text-left px-4 py-2 hover:bg-slate-700 text-slate-200 flex items-center space-x-2.5 transition-colors">
+                        <span class="p-1 rounded bg-orange-500/20 text-orange-400 font-bold text-xs">PPTX</span>
+                        <span>Презентація PowerPoint</span>
+                    </button>
+                    <button id="downloadHTMLBtn" class="w-full text-left px-4 py-2 hover:bg-slate-700 text-slate-200 flex items-center space-x-2.5 transition-colors">
+                        <span class="p-1 rounded bg-blue-500/20 text-blue-400 font-bold text-xs">HTML</span>
+                        <span>Автономний веб-файл</span>
+                    </button>
+                    <button id="printPDFBtn" class="w-full text-left px-4 py-2 hover:bg-slate-700 text-slate-200 flex items-center space-x-2.5 transition-colors">
+                        <span class="p-1 rounded bg-red-500/20 text-red-400 font-bold text-xs">PDF</span>
+                        <span>Друк / Зберегти у PDF</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700 rounded-full px-4 py-1.5 text-xs sm:text-sm font-medium text-slate-300">
+                Крок <span id="currentStepText" class="text-blue-400 font-bold">1</span> з <span id="totalStepsText" class="text-slate-400">8</span>
+            </div>
+            <button id="resetBtn" title="Скинути до першого кроку" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col justify-center items-center p-3 sm:p-6 cursor-pointer" id="presentationCanvas" title="Клацніть для переходу далі">
+        
+        <!-- Blackboard Card Container -->
+        <div class="w-full max-w-5xl bg-slate-900/90 border border-slate-800 rounded-2xl shadow-2xl p-4 sm:p-8 flex flex-col justify-between backdrop-blur-md relative overflow-hidden" style="min-h-[420px]">
+            
+            <!-- Top Column Layout strictly copying the image structure -->
+            <div class="grid grid-cols-12 gap-2 sm:gap-6 text-xl sm:text-3xl lg:text-4xl math-text text-slate-100 tracking-wide font-normal">
+                
+                <!-- COLUMN 1: Дано -->
+                <div class="col-span-4 pr-2 sm:pr-6 border-r border-slate-700 flex flex-col space-y-3 sm:space-y-5">
+                    <!-- Step 1: Дано title -->
+                    <div id="step-1" class="step-item step-hidden font-bold italic">
+                        Дано:
+                    </div>
+                    
+                    <!-- Step 2: l = 6 м -->
+                    <div id="step-2" class="step-item step-hidden pl-2">
+                        <i class="font-serif">l</i> = 6 м
+                    </div>
+                    
+                    <!-- Step 3: h = 1,5 м -->
+                    <div id="step-3" class="step-item step-hidden pl-2">
+                        <i class="font-serif">h</i> = 1,5 м
+                    </div>
+                    
+                    <!-- Step 4: Line and target variable fraction -->
+                    <div id="step-4" class="step-item step-hidden pt-2 border-t-2 border-slate-500 flex items-center space-x-2">
+                        <div class="frac">
+                            <span class="num"><i class="font-serif">F</i><sub>1</sub></span>
+                            <span class="den"><i class="font-serif">F</i><sub>2</sub></span>
+                        </div>
+                        <span class="mx-1">&mdash;</span>
+                        <span>?</span>
+                    </div>
+                </div>
+
+                <!-- COLUMN 2: Розв'язання -->
+                <div class="col-span-4 px-2 sm:px-6 border-r border-slate-700 flex flex-col items-center">
+                    <!-- Step 1 (or 5): Header Розв'язання -->
+                    <div id="step-1-header" class="step-item step-hidden font-bold italic mb-6 sm:mb-10 text-center">
+                        Розв'язання
+                    </div>
+                    
+                    <!-- Step 5: Main formula F1/F2 = l/h -->
+                    <div id="step-5" class="step-item step-hidden flex items-center justify-center my-auto">
+                        <div class="frac">
+                            <span class="num"><i class="font-serif">F</i><sub>1</sub></span>
+                            <span class="den"><i class="font-serif">F</i><sub>2</sub></span>
+                        </div>
+                        <span class="mx-2 sm:mx-4">=</span>
+                        <div class="frac">
+                            <span class="num"><i class="font-serif">l</i></span>
+                            <span class="den"><i class="font-serif">h</i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMN 3: Calculations & Units -->
+                <div class="col-span-4 pl-2 sm:pl-6 flex flex-col justify-start space-y-6 sm:space-y-10 pt-10 sm:pt-14">
+                    
+                    <!-- Step 6: Dimensional Analysis [F1/F2] = м/м = 1 -->
+                    <div id="step-6" class="step-item step-hidden flex items-center justify-start flex-wrap gap-y-2">
+                        <div class="bracket-frac">
+                            <span class="text-2xl sm:text-4xl">[</span>
+                            <div class="frac">
+                                <span class="num"><i class="font-serif">F</i><sub>1</sub></span>
+                                <span class="den"><i class="font-serif">F</i><sub>2</sub></span>
+                            </div>
+                            <span class="text-2xl sm:text-4xl">]</span>
+                        </div>
+                        <span class="mx-2 sm:mx-3">=</span>
+                        <div class="frac">
+                            <span class="num">м</span>
+                            <span class="den">м</span>
+                        </div>
+                        <span class="mx-2 sm:mx-3">=</span>
+                        <span>1</span>
+                    </div>
+
+                    <!-- Step 7: Numerical calculation F1/F2 = 6 / 1.5 = 4 -->
+                    <div id="step-7" class="step-item step-hidden flex items-center justify-start flex-wrap gap-y-2">
+                        <div class="frac">
+                            <span class="num"><i class="font-serif">F</i><sub>1</sub></span>
+                            <span class="den"><i class="font-serif">F</i><sub>2</sub></span>
+                        </div>
+                        <span class="mx-2 sm:mx-3">=</span>
+                        <div class="frac">
+                            <span class="num">6</span>
+                            <span class="den">1,5</span>
+                        </div>
+                        <span class="mx-2 sm:mx-3">=</span>
+                        <span>4</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM ROW: Відповідь -->
+            <div class="mt-8 sm:mt-12 pt-4 sm:pt-6 border-t border-slate-800 min-h-[60px] flex items-center">
+                <!-- Step 8: Final Answer -->
+                <div id="step-8" class="step-item step-hidden text-lg sm:text-2xl lg:text-3xl math-text">
+                    <span class="font-bold italic">Відповідь:</span> <span class="font-serif">виграш у силі дорівнює 4.</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 border-t border-slate-800 px-4 py-4 sm:px-8">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            <!-- Progress Bar -->
+            <div class="w-full sm:w-1/3 bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full w-1/8 transition-all duration-300"></div>
+            </div>
+
+            <!-- Interactive Control Buttons -->
+            <div class="flex items-center space-x-3">
+                <button id="prevBtn" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-2 border border-slate-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <span>Назад</span>
+                </button>
+
+                <button id="nextBtn" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-500/20 transition-all flex items-center space-x-2">
+                    <span>Далі</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Hint text for keyboard shortcuts -->
+            <div class="text-xs text-slate-500 hidden sm:block">
+                Використовуйте стрілки <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">←</kbd> <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">→</kbd> або клацніть по дошці
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // State variables
+        let currentStep = 1;
+        const totalSteps = 8;
+
+        // DOM Elements
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const currentStepText = document.getElementById('currentStepText');
+        const totalStepsText = document.getElementById('totalStepsText');
+        const progressBar = document.getElementById('progressBar');
+        const presentationCanvas = document.getElementById('presentationCanvas');
+
+        // Mapping step indices to corresponding elements
+        function updateStepsUI() {
+            // Update counter text
+            currentStepText.textContent = currentStep;
+            totalStepsText.textContent = totalSteps;
+
+            // Update Progress Bar
+            const progressPercentage = (currentStep / totalSteps) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+
+            // Update Buttons disabled state
+            prevBtn.disabled = currentStep === 1;
+            
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = `
+                    <span>Завершити</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>`;
+                nextBtn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+                nextBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
+            } else {
+                nextBtn.innerHTML = `
+                    <span>Далі</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>`;
+                nextBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+                nextBtn.classList.add('bg-blue-600', 'hover:bg-blue-500');
+            }
+
+            // Reveal/Hide elements based on current step
+            // Step 1 reveals header "Дано:" and "Розв'язання"
+            toggleVisibility('step-1', currentStep >= 1);
+            toggleVisibility('step-1-header', currentStep >= 1);
+            
+            // Step 2: l = 6 м
+            toggleVisibility('step-2', currentStep >= 2);
+            
+            // Step 3: h = 1,5 м
+            toggleVisibility('step-3', currentStep >= 3);
+            
+            // Step 4: Line + F1/F2 - ?
+            toggleVisibility('step-4', currentStep >= 4);
+            
+            // Step 5: F1/F2 = l/h
+            toggleVisibility('step-5', currentStep >= 5);
+            
+            // Step 6: [F1/F2] = м/м = 1
+            toggleVisibility('step-6', currentStep >= 6);
+            
+            // Step 7: F1/F2 = 6 / 1,5 = 4
+            toggleVisibility('step-7', currentStep >= 7);
+            
+            // Step 8: Відповідь: виграш у силі дорівнює 4.
+            toggleVisibility('step-8', currentStep >= 8);
+        }
+
+        function toggleVisibility(elementId, isVisible) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+
+            if (isVisible) {
+                if (el.classList.contains('step-hidden')) {
+                    el.classList.remove('step-hidden');
+                    el.classList.add('step-visible', 'step-highlight');
+                    
+                    // Remove highlight class after animation finishes
+                    setTimeout(() => {
+                        el.classList.remove('step-highlight');
+                    }, 1200);
+                }
+            } else {
+                el.classList.remove('step-visible', 'step-highlight');
+                el.classList.add('step-hidden');
+            }
+        }
+
+        // Navigation Handlers
+        function goToNextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepsUI();
+            } else {
+                // Restart on clicking finish
+                currentStep = 1;
+                updateStepsUI();
+            }
+        }
+
+        function goToPrevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepsUI();
+            }
+        }
+
+        function resetPresentation() {
+            currentStep = 1;
+            updateStepsUI();
+        }
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goToNextStep();
+        });
+
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goToPrevStep();
+        });
+
+        resetBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetPresentation();
+        });
+
+        // Click on screen advances to next step
+        presentationCanvas.addEventListener('click', () => {
+            goToNextStep();
+        });
+
+        // Keyboard navigation (Arrow keys, Spacebar, Enter)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                goToNextStep();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                goToPrevStep();
+            } else if (e.key === 'Home' || e.key === 'Escape') {
+                resetPresentation();
+            }
+        });
+
+        // Initialize display on window load
+        window.onload = function() {
+            updateStepsUI();
+        };
+
+        // Export Menu functionality
+        const exportBtn = document.getElementById('exportBtn');
+        const exportDropdownMenu = document.getElementById('exportDropdownMenu');
+        const downloadPPTXBtn = document.getElementById('downloadPPTXBtn');
+        const downloadHTMLBtn = document.getElementById('downloadHTMLBtn');
+        const printPDFBtn = document.getElementById('printPDFBtn');
+
+        exportBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportDropdownMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', () => {
+            if (!exportDropdownMenu.classList.contains('hidden')) {
+                exportDropdownMenu.classList.add('hidden');
+            }
+        });
+
+        // 1. PowerPoint (.pptx) Generator
+        downloadPPTXBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportDropdownMenu.classList.add('hidden');
+
+            try {
+                const pptx = new PptxGenJS();
+                pptx.layout = 'LAYOUT_16x9';
+                pptx.author = 'Physics Solution App';
+                pptx.title = 'Розв\'язання задачі з фізики';
+
+                // Helper to render math fractions with fraction bar line in PPTX
+                const renderFraction = (slide, numText, denText, x, y, size = 22, color = 'F1F5F9') => {
+                    const w = 0.65;
+                    const hNum = 0.35;
+                    const hDen = 0.35;
+                    
+                    // Numerator
+                    slide.addText(numText, {
+                        x: x, y: y, w: w, h: hNum,
+                        fontSize: size, color: color, fontFace: 'Times New Roman', italic: true, align: 'center', margin: 0
+                    });
+                    
+                    // Horizontal fraction bar line
+                    slide.addShape(pptx.ShapeType.line, {
+                        x: x + 0.05, y: y + hNum + 0.02, w: w - 0.1, h: 0,
+                        line: { color: color, width: 1.8 }
+                    });
+                    
+                    // Denominator
+                    slide.addText(denText, {
+                        x: x, y: y + hNum + 0.05, w: w, h: hDen,
+                        fontSize: size, color: color, fontFace: 'Times New Roman', italic: true, align: 'center', margin: 0
+                    });
+                };
+
+                // Create 8 progressive slides matching blackboard visual presentation
+                for (let s = 1; s <= 8; s++) {
+                    const slide = pptx.addSlide();
+                    slide.background = { color: '0F172A' }; // Dark Slate background
+
+                    // Top Slide Header Banner
+                    slide.addText(`Фізика: Розв'язання задачі (Крок ${s} з 8)`, {
+                        x: 0.6, y: 0.4, w: 9.0, h: 0.4,
+                        fontSize: 14, color: '94A3B8', fontFace: 'Arial', bold: true
+                    });
+
+                    // Column Vertical Dividers (drawn on all slides)
+                    slide.addShape(pptx.ShapeType.line, {
+                        x: 3.3, y: 1.1, w: 0, h: 3.2,
+                        line: { color: '475569', width: 2 }
+                    });
+                    slide.addShape(pptx.ShapeType.line, {
+                        x: 6.6, y: 1.1, w: 0, h: 3.2,
+                        line: { color: '475569', width: 2 }
+                    });
+
+                    // --- COLUMN 1: Дано ---
+                    if (s >= 1) {
+                        slide.addText('Дано:', {
+                            x: 0.8, y: 1.1, w: 2.2, h: 0.5,
+                            fontSize: 24, color: 'FFFFFF', fontFace: 'Times New Roman', italic: true, bold: true
+                        });
+                    }
+                    if (s >= 2) {
+                        slide.addText('l = 6 м', {
+                            x: 0.8, y: 1.7, w: 2.2, h: 0.4,
+                            fontSize: 22, color: 'F1F5F9', fontFace: 'Times New Roman', italic: true
+                        });
+                    }
+                    if (s >= 3) {
+                        slide.addText('h = 1,5 м', {
+                            x: 0.8, y: 2.2, w: 2.2, h: 0.4,
+                            fontSize: 22, color: 'F1F5F9', fontFace: 'Times New Roman', italic: true
+                        });
+                    }
+                    if (s >= 4) {
+                        // Horizontal divider line under 'Дано' variables
+                        slide.addShape(pptx.ShapeType.line, {
+                            x: 0.8, y: 2.8, w: 2.2, h: 0,
+                            line: { color: '64748B', width: 2 }
+                        });
+
+                        // F1 / F2 — ?
+                        renderFraction(slide, 'F₁', 'F₂', 0.8, 2.95, 22, 'F1F5F9');
+                        slide.addText('— ?', {
+                            x: 1.55, y: 3.05, w: 1.0, h: 0.5,
+                            fontSize: 22, color: 'F1F5F9', fontFace: 'Times New Roman'
+                        });
+                    }
+
+                    // --- COLUMN 2: Розв'язання ---
+                    if (s >= 1) {
+                        slide.addText('Розв\'язання', {
+                            x: 3.5, y: 1.1, w: 3.0, h: 0.5,
+                            fontSize: 24, color: 'FFFFFF', fontFace: 'Times New Roman', italic: true, bold: true, align: 'center'
+                        });
+                    }
+                    if (s >= 5) {
+                        // F1/F2 = l/h
+                        renderFraction(slide, 'F₁', 'F₂', 4.1, 2.2, 24, 'F1F5F9');
+                        slide.addText('=', {
+                            x: 4.8, y: 2.3, w: 0.3, h: 0.4,
+                            fontSize: 24, color: 'F1F5F9', fontFace: 'Times New Roman', align: 'center'
+                        });
+                        renderFraction(slide, 'l', 'h', 5.15, 2.2, 24, 'F1F5F9');
+                    }
+
+                    // --- COLUMN 3: Обчислення ---
+                    if (s >= 6) {
+                        // [F1/F2] = м/м = 1
+                        slide.addText('[', { x: 6.8, y: 1.45, w: 0.2, h: 0.5, fontSize: 26, color: 'F1F5F9', fontFace: 'Times New Roman' });
+                        renderFraction(slide, 'F₁', 'F₂', 7.0, 1.4, 20, 'F1F5F9');
+                        slide.addText(']', { x: 7.7, y: 1.45, w: 0.2, h: 0.5, fontSize: 26, color: 'F1F5F9', fontFace: 'Times New Roman' });
+                        
+                        slide.addText('=', { x: 7.95, y: 1.55, w: 0.3, h: 0.4, fontSize: 22, color: 'F1F5F9', fontFace: 'Times New Roman', align: 'center' });
+                        renderFraction(slide, 'м', 'м', 8.3, 1.4, 20, 'F1F5F9');
+                        slide.addText('= 1', { x: 9.0, y: 1.55, w: 0.6, h: 0.4, fontSize: 22, color: 'F1F5F9', fontFace: 'Times New Roman' });
+                    }
+
+                    if (s >= 7) {
+                        // F1/F2 = 6 / 1.5 = 4
+                        renderFraction(slide, 'F₁', 'F₂', 7.0, 2.6, 22, 'F1F5F9');
+                        slide.addText('=', { x: 7.7, y: 2.75, w: 0.3, h: 0.4, fontSize: 22, color: 'F1F5F9', fontFace: 'Times New Roman', align: 'center' });
+                        renderFraction(slide, '6', '1,5', 8.05, 2.6, 22, 'F1F5F9');
+                        slide.addText('= 4', { x: 8.75, y: 2.75, w: 0.6, h: 0.4, fontSize: 22, color: 'F1F5F9', fontFace: 'Times New Roman' });
+                    }
+
+                    // --- BOTTOM ROW: Відповідь ---
+                    if (s >= 8) {
+                        // Horizontal divider line before answer
+                        slide.addShape(pptx.ShapeType.line, {
+                            x: 0.8, y: 4.5, w: 8.4, h: 0,
+                            line: { color: '334155', width: 1.5 }
+                        });
+
+                        slide.addText('Відповідь: виграш у силі дорівнює 4.', {
+                            x: 0.8, y: 4.65, w: 8.5, h: 0.6,
+                            fontSize: 22, color: '34D399', fontFace: 'Times New Roman', bold: true
+                        });
+                    }
+                }
+
+                pptx.writeFile({ fileName: 'Rozvyazok_Zadachi_Fizyka.pptx' });
+            } catch (err) {
+                console.error(err);
+                alert('Не вдалося згенерувати PPTX. Спробуйте зберегти як HTML або PDF.');
+            }
+        });
+
+        // 2. Offline Single-File HTML Downloader
+        downloadHTMLBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportDropdownMenu.classList.add('hidden');
+
+            const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'fizyka_zadacha_presentation.html';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // 3. Save as PDF / Print Handler
+        printPDFBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportDropdownMenu.classList.add('hidden');
+            window.print();
+        });
+    </script>
+</body>
+</html>
