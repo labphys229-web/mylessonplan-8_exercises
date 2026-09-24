@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивна вправа: Механічна робота, сила та шлях</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- KaTeX for LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMath()"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 50%, #06b6d4 100%);
+        }
+        .correct-anim {
+            animation: pulse-green 0.5s ease-in-out;
+        }
+        .wrong-anim {
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); background-color: #dcfce7; }
+            100% { transform: scale(1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <div>
+        <!-- Top Navigation / Header -->
+        <header class="gradient-bg text-white shadow-lg py-8 px-4 sm:px-6 mb-8">
+            <div class="max-w-6xl mx-auto text-center">
+                <span class="inline-block bg-white/20 backdrop-blur-md text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-3 text-indigo-100">
+                    Фізика 7 клас • Фізичні величини
+                </span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">
+                    Механічна робота, Сила та Шлях
+                </h1>
+                <p class="text-indigo-100 max-w-2xl mx-auto text-sm sm:text-base">
+                    Розраховуйте невідому величину ($A$, $F$ або $s$) та перевіряйте свої знання. 
+                    Пам'ятайте про переведення одиниць вимірювання в систему СІ!
+                </p>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto px-4 sm:px-6 mb-12">
+            
+            <!-- Reference Formulas & Cheatsheet Bar -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Formula Card -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-2 text-indigo-600 font-bold mb-3">
+                            <i class="fa-solid fa-square-root-variable text-xl"></i>
+                            <h3 class="text-lg">Основні формули</h3>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                                <span>Робота:</span>
+                                <span class="font-mono font-bold text-indigo-700">$A = F \cdot s$</span>
+                            </div>
+                            <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                                <span>Сила:</span>
+                                <span class="font-mono font-bold text-indigo-700">$F = \frac{A}{s}$</span>
+                            </div>
+                            <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
+                                <span>Шлях:</span>
+                                <span class="font-mono font-bold text-indigo-700">$s = \frac{A}{F}$</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Units SI Card -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <div class="flex items-center space-x-2 text-blue-600 font-bold mb-3">
+                        <i class="fa-solid fa-scale-balanced text-xl"></i>
+                        <h3 class="text-lg">Одиниці вимірювання СІ</h3>
+                    </div>
+                    <ul class="text-sm space-y-2 text-slate-600">
+                        <li class="flex items-center space-x-2">
+                            <span class="w-20 font-semibold text-slate-800">Робота (A):</span>
+                            <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-mono font-medium">Дж (Джоуль)</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-20 font-semibold text-slate-800">Сила (F):</span>
+                            <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-mono font-medium">Н (Ньютон)</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <span class="w-20 font-semibold text-slate-800">Шлях (s):</span>
+                            <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-mono font-medium">м (Метр)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Prefixes Cheatsheet -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <div class="flex items-center space-x-2 text-teal-600 font-bold mb-3">
+                        <i class="fa-solid fa-arrow-right-arrow-left text-xl"></i>
+                        <h3 class="text-lg">Переведення в СІ</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-teal-50/60 p-2 rounded border border-teal-100">
+                            <div class="font-semibold text-teal-800">1 кДж = 1 000 Дж</div>
+                            <div class="text-slate-500">10³ Дж</div>
+                        </div>
+                        <div class="bg-teal-50/60 p-2 rounded border border-teal-100">
+                            <div class="font-semibold text-teal-800">1 кН = 1 000 Н</div>
+                            <div class="text-slate-500">10³ Н</div>
+                        </div>
+                        <div class="bg-teal-50/60 p-2 rounded border border-teal-100">
+                            <div class="font-semibold text-teal-800">1 см = 0,01 м</div>
+                            <div class="text-slate-500">1/100 м</div>
+                        </div>
+                        <div class="bg-teal-50/60 p-2 rounded border border-teal-100">
+                            <div class="font-semibold text-teal-800">1 км = 1 000 м</div>
+                            <div class="text-slate-500">10³ м</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Bar: Level selector and score -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <!-- Level Switcher -->
+                <div class="flex bg-slate-100 p-1 rounded-xl w-full sm:w-auto">
+                    <button id="tab-lvl1" onclick="switchLevel(1)" class="flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 shadow-sm bg-white text-indigo-600">
+                        <i class="fa-solid fa-star mr-1 text-amber-400"></i> Рівень 1: Всі величини в СІ
+                    </button>
+                    <button id="tab-lvl2" onclick="switchLevel(2)" class="flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm text-slate-600 hover:text-slate-900 transition-all duration-200">
+                        <i class="fa-solid fa-fire mr-1 text-orange-500"></i> Рівень 2: Переведення в СІ
+                    </button>
+                </div>
+
+                <!-- Stats and Actions -->
+                <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                    <div class="bg-amber-50 text-amber-800 px-4 py-2 rounded-xl border border-amber-200 flex items-center space-x-2 text-sm font-bold">
+                        <i class="fa-solid fa-trophy text-amber-500"></i>
+                        <span>Успіх: <span id="score-display">0/0</span></span>
+                    </div>
+                    <button onclick="resetExercise()" title="Скинути результати" class="p-2.5 text-slate-500 hover:text-indigo-600 bg-slate-100 hover:bg-indigo-50 rounded-xl transition">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                    <button onclick="generateRandomTask()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-sm transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Додати завдання</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Interactive Table Container -->
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100/80 border-b border-slate-200 text-xs uppercase font-bold text-slate-600 tracking-wider">
+                                <th class="py-4 px-4 text-center w-12">№</th>
+                                <th class="py-4 px-4 w-1/4">
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block"></span>
+                                        <span>Механічна робота ($A$)</span>
+                                    </div>
+                                </th>
+                                <th class="py-4 px-4 w-1/4">
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
+                                        <span>Значення сили ($F$)</span>
+                                    </div>
+                                </th>
+                                <th class="py-4 px-4 w-1/4">
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-teal-500 inline-block"></span>
+                                        <span>Пройдений шлях ($s$)</span>
+                                    </div>
+                                </th>
+                                <th class="py-4 px-4 text-center w-40">Дія / Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exercise-table-body" class="divide-y divide-slate-100 text-sm sm:text-base">
+                            <!-- Dynamic rows will be rendered here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Global Table Footer Buttons -->
+                <div class="bg-slate-50 p-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <div class="text-xs text-slate-500 flex items-center space-x-1">
+                        <i class="fa-solid fa-circle-info text-indigo-500"></i>
+                        <span>Вводьте розраховані значення в <strong>основних одиницях СІ (Дж, Н, м)</strong>.</span>
+                    </div>
+                    <div class="flex space-x-2 w-full sm:w-auto">
+                        <button onclick="checkAllAnswers()" class="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl shadow-sm transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-check-double"></i>
+                            <span>Перевірити всі</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guidance Message Box -->
+            <div id="status-message" class="mt-6 hidden p-4 rounded-xl border flex items-center justify-between text-sm">
+                <!-- Dynamic feedback message -->
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Solution Modal -->
+    <div id="solution-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-lg w-full p-6 relative animate-in fade-in zoom-in duration-200">
+            <button onclick="closeSolutionModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-lightbulb text-lg"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Покрокове розв'язання</h3>
+                    <p class="text-xs text-slate-500" id="modal-task-title">Завдання №1</p>
+                </div>
+            </div>
+            
+            <div id="modal-solution-content" class="space-y-4 text-sm text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <!-- Content inserted via JS -->
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeSolutionModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl transition">
+                    Зрозуміло
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 px-4 text-center text-xs text-slate-500">
+        <p>Інтерактивний тренажер з фізики • Розділ: Механічна робота та енергія</p>
+    </footer>
+
+    <script>
+        // Preset tasks for Level 1 (All SI units)
+        const level1Tasks = [
+            { id: 1, F: { val: 50, unit: 'Н' }, s: { val: 4, unit: 'м' }, A: null, target: 'A', correctSI: 200 },
+            { id: 2, A: { val: 600, unit: 'Дж' }, F: { val: 30, unit: 'Н' }, s: null, target: 's', correctSI: 20 },
+            { id: 3, A: { val: 1500, unit: 'Дж' }, s: { val: 50, unit: 'м' }, F: null, target: 'F', correctSI: 30 },
+            { id: 4, F: { val: 12, unit: 'Н' }, s: { val: 15, unit: 'м' }, A: null, target: 'A', correctSI: 180 },
+            { id: 5, A: { val: 480, unit: 'Дж' }, F: { val: 60, unit: 'Н' }, s: null, target: 's', correctSI: 8 }
+        ];
+
+        // Preset tasks for Level 2 (Requires conversion to SI)
+        const level2Tasks = [
+            { 
+                id: 1, 
+                F: { val: 2, unit: 'кН', siVal: 2000 }, 
+                s: { val: 5, unit: 'м', siVal: 5 }, 
+                A: null, 
+                target: 'A', 
+                correctSI: 10000,
+                hint: "1 кН = 1000 Н. Робота = 2000 Н * 5 м = 10000 Дж"
+            },
+            { 
+                id: 2, 
+                A: { val: 3.6, unit: 'кДж', siVal: 3600 }, 
+                F: { val: 400, unit: 'Н', siVal: 400 }, 
+                s: null, 
+                target: 's', 
+                correctSI: 9,
+                hint: "3.6 кДж = 3600 Дж. Шлях = 3600 Дж / 400 Н = 9 м"
+            },
+            { 
+                id: 3, 
+                A: { val: 240, unit: 'Дж', siVal: 240 }, 
+                s: { val: 80, unit: 'см', siVal: 0.8 }, 
+                F: null, 
+                target: 'F', 
+                correctSI: 300,
+                hint: "80 см = 0.8 м. Сила = 240 Дж / 0.8 м = 300 Н"
+            },
+            { 
+                id: 4, 
+                F: { val: 1.5, unit: 'кН', siVal: 1500 }, 
+                s: { val: 20, unit: 'см', siVal: 0.2 }, 
+                A: null, 
+                target: 'A', 
+                correctSI: 300,
+                hint: "1.5 кН = 1500 Н, 20 см = 0.2 м. Робота = 1500 * 0.2 = 300 Дж"
+            },
+            { 
+                id: 5, 
+                A: { val: 0.5, unit: 'кДж', siVal: 500 }, 
+                s: { val: 25, unit: 'м', siVal: 25 }, 
+                F: null, 
+                target: 'F', 
+                correctSI: 20,
+                hint: "0.5 кДж = 500 Дж. Сила = 500 Дж / 25 м = 20 Н"
+            },
+            { 
+                id: 6, 
+                F: { val: 250, unit: 'Н', siVal: 250 }, 
+                s: { val: 1.2, unit: 'км', siVal: 1200 }, 
+                A: null, 
+                target: 'A', 
+                correctSI: 300000,
+                hint: "1.2 км = 1200 м. Робота = 250 Н * 1200 м = 300000 Дж"
+            }
+        ];
+
+        let currentLevel = 1;
+        let activeTasks = [];
+        let taskStates = {}; // Stores user inputs and validation state per task index
+
+        window.onload = function() {
+            initLevel(1);
+        };
+
+        function renderMath() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function initLevel(lvl) {
+            currentLevel = lvl;
+            if (lvl === 1) {
+                // Clone level 1 tasks
+                activeTasks = JSON.parse(JSON.stringify(level1Tasks));
+            } else {
+                // Clone level 2 tasks
+                activeTasks = JSON.parse(JSON.stringify(level2Tasks));
+            }
+            
+            // Reset state
+            taskStates = {};
+            activeTasks.forEach((_, idx) => {
+                taskStates[idx] = { value: '', status: 'pending' };
+            });
+
+            updateTabUI();
+            renderTable();
+            updateScoreDisplay();
+        }
+
+        function switchLevel(lvl) {
+            if (currentLevel === lvl) return;
+            initLevel(lvl);
+        }
+
+        function updateTabUI() {
+            const btn1 = document.getElementById('tab-lvl1');
+            const btn2 = document.getElementById('tab-lvl2');
+
+            if (currentLevel === 1) {
+                btn1.className = "flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 shadow-sm bg-white text-indigo-600";
+                btn2.className = "flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm text-slate-600 hover:text-slate-900 transition-all duration-200";
+            } else {
+                btn2.className = "flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 shadow-sm bg-white text-indigo-600";
+                btn1.className = "flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm text-slate-600 hover:text-slate-900 transition-all duration-200";
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('exercise-table-body');
+            tbody.innerHTML = '';
+
+            activeTasks.forEach((task, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/80 transition-colors duration-150";
+                tr.id = `task-row-${index}`;
+
+                // Index column
+                let html = `<td class="py-4 px-4 text-center font-bold text-slate-400">${index + 1}</td>`;
+
+                // Work Column (A)
+                html += renderCellContent(task, 'A', index);
+
+                // Force Column (F)
+                html += renderCellContent(task, 'F', index);
+
+                // Distance Column (s)
+                html += renderCellContent(task, 's', index);
+
+                // Action Column
+                const state = taskStates[index] || { status: 'pending' };
+                let statusBadge = '';
+
+                if (state.status === 'correct') {
+                    statusBadge = `
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                            <i class="fa-solid fa-circle-check mr-1"></i> Вірно
+                        </span>`;
+                } else if (state.status === 'wrong') {
+                    statusBadge = `
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800">
+                            <i class="fa-solid fa-circle-xmark mr-1"></i> Помилка
+                        </span>`;
+                } else {
+                    statusBadge = `
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                            <i class="fa-regular fa-clock mr-1"></i> Очікує
+                        </span>`;
+                }
+
+                html += `
+                    <td class="py-4 px-4 text-center">
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-2">
+                            ${statusBadge}
+                            <button onclick="showSolution(${index})" title="Переглянути покрокове розв'язання" class="p-1.5 text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-lg transition text-xs font-medium flex items-center space-x-1">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <span class="hidden sm:inline">Розв'язок</span>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                tr.innerHTML = html;
+                tbody.appendChild(tr);
+            });
+
+            // Render LaTeX formulas in table headers and cells
+            renderMath();
+        }
+
+        function renderCellContent(task, key, index) {
+            const isTarget = task.target === key;
+            const targetSIUnit = key === 'A' ? 'Дж' : (key === 'F' ? 'Н' : 'м');
+
+            if (!isTarget) {
+                // Known value
+                const data = task[key];
+                return `
+                    <td class="py-4 px-4">
+                        <div class="font-medium text-slate-800 bg-slate-100/70 inline-block px-3 py-1.5 rounded-xl border border-slate-200/60">
+                            <span class="text-xs font-semibold text-slate-500 mr-1">${key} =</span>
+                            <span class="font-bold">${data.val}</span> 
+                            <span class="text-slate-600 text-xs font-medium">${data.unit}</span>
+                        </div>
+                    </td>
+                `;
+            } else {
+                // Target value to calculate (Input box)
+                const userVal = taskStates[index] ? taskStates[index].value : '';
+                const state = taskStates[index] ? taskStates[index].status : 'pending';
+
+                let borderClass = 'border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200';
+                if (state === 'correct') borderClass = 'border-emerald-500 bg-emerald-50/50 text-emerald-900 font-bold';
+                if (state === 'wrong') borderClass = 'border-rose-400 bg-rose-50/50 text-rose-900';
+
+                return `
+                    <td class="py-4 px-4">
+                        <div class="relative flex items-center max-w-[170px]">
+                            <span class="absolute left-3 text-xs font-bold text-indigo-600 pointer-events-none">${key} =</span>
+                            <input 
+                                type="number" 
+                                step="any"
+                                value="${userVal}"
+                                placeholder="?" 
+                                oninput="handleInputChange(${index}, this.value)"
+                                onkeydown="if(event.key==='Enter') checkSingleAnswer(${index})"
+                                class="w-full pl-10 pr-9 py-2 text-sm rounded-xl border ${borderClass} outline-none transition font-medium shadow-sm"
+                            />
+                            <span class="absolute right-3 text-xs font-semibold text-slate-400 pointer-events-none">${targetSIUnit}</span>
+                        </div>
+                    </td>
+                `;
+            }
+        }
+
+        function handleInputChange(index, val) {
+            if (!taskStates[index]) taskStates[index] = {};
+            taskStates[index].value = val.trim();
+            // Reset status when user edits
+            if (taskStates[index].status !== 'pending') {
+                taskStates[index].status = 'pending';
+                renderTable();
+            }
+        }
+
+        function checkSingleAnswer(index) {
+            const task = activeTasks[index];
+            const state = taskStates[index];
+
+            if (!state || state.value === '') {
+                showToast("Будь ласка, введіть відповідь перед перевіркою!", "warning");
+                return;
+            }
+
+            const numVal = parseFloat(state.value.replace(',', '.'));
+            const expected = task.correctSI;
+
+            // Allow small float margin error (e.g. 0.01)
+            if (Math.abs(numVal - expected) < 0.01) {
+                state.status = 'correct';
+                playSound('correct');
+            } else {
+                state.status = 'wrong';
+                playSound('wrong');
+            }
+
+            renderTable();
+            updateScoreDisplay();
+        }
+
+        function checkAllAnswers() {
+            let filledCount = 0;
+            let correctCount = 0;
+
+            activeTasks.forEach((task, index) => {
+                const state = taskStates[index];
+                if (state && state.value !== '') {
+                    filledCount++;
+                    const numVal = parseFloat(state.value.replace(',', '.'));
+                    if (Math.abs(numVal - task.correctSI) < 0.01) {
+                        state.status = 'correct';
+                        correctCount++;
+                    } else {
+                        state.status = 'wrong';
+                    }
+                }
+            });
+
+            renderTable();
+            updateScoreDisplay();
+
+            if (filledCount === 0) {
+                showToast("Введіть хоча б одну відповідь у таблицю!", "info");
+            } else if (correctCount === activeTasks.length) {
+                playSound('correct');
+                showToast("Чудова робота! Усі відповіді абсолютно правильні! 🎉", "success");
+            } else {
+                playSound('wrong');
+                showToast(`Перевірено! Правильних відповідей: ${correctCount} з ${activeTasks.length}.`, "info");
+            }
+        }
+
+        function updateScoreDisplay() {
+            const correct = Object.values(taskStates).filter(s => s.status === 'correct').length;
+            const total = activeTasks.length;
+            document.getElementById('score-display').innerText = `${correct}/${total}`;
+        }
+
+        function resetExercise() {
+            initLevel(currentLevel);
+            showToast("Вправу скинуто до початкового стану.", "info");
+        }
+
+        function generateRandomTask() {
+            const targets = ['A', 'F', 's'];
+            const chosenTarget = targets[Math.floor(Math.random() * targets.length)];
+            const isLvl2 = currentLevel === 2;
+
+            let task = { id: activeTasks.length + 1, target: chosenTarget };
+
+            if (!isLvl2) {
+                // Level 1: Random SI values
+                const F_val = Math.floor(Math.random() * 40 + 5) * 5; // e.g. 25..200 N
+                const s_val = Math.floor(Math.random() * 20 + 2); // e.g. 2..22 m
+                const A_val = F_val * s_val;
+
+                task.F = { val: F_val, unit: 'Н' };
+                task.s = { val: s_val, unit: 'м' };
+                task.A = { val: A_val, unit: 'Дж' };
+                
+                if (chosenTarget === 'A') { task.A = null; task.correctSI = A_val; }
+                if (chosenTarget === 'F') { task.F = null; task.correctSI = F_val; }
+                if (chosenTarget === 's') { task.s = null; task.correctSI = s_val; }
+
+            } else {
+                // Level 2: Random non-SI conversions
+                const scenarios = [
+                    { type: 'kN_m', F_kN: (Math.floor(Math.random() * 5) + 1), s_m: Math.floor(Math.random() * 10) + 2 },
+                    { type: 'kJ_N', A_kJ: (Math.floor(Math.random() * 8) + 1) * 0.5, F_N: Math.floor(Math.random() * 10 + 1) * 50 },
+                    { type: 'J_cm', A_J: Math.floor(Math.random() * 20 + 5) * 10, s_cm: (Math.floor(Math.random() * 10) + 1) * 10 }
+                ];
+                const sc = scenarios[Math.floor(Math.random() * scenarios.length)];
+
+                if (sc.type === 'kN_m') {
+                    const F_si = sc.F_kN * 1000;
+                    const s_si = sc.s_m;
+                    const A_si = F_si * s_si;
+                    task.F = { val: sc.F_kN, unit: 'кН', siVal: F_si };
+                    task.s = { val: s_si, unit: 'м', siVal: s_si };
+                    task.A = { val: A_si, unit: 'Дж', siVal: A_si };
+                    if (chosenTarget === 'A') { task.A = null; task.correctSI = A_si; }
+                    else if (chosenTarget === 'F') { task.F = null; task.correctSI = F_si; }
+                    else { task.s = null; task.correctSI = s_si; }
+                } else if (sc.type === 'kJ_N') {
+                    const A_si = sc.A_kJ * 1000;
+                    const F_si = sc.F_N;
+                    const s_si = Math.round((A_si / F_si) * 100) / 100;
+                    task.A = { val: sc.A_kJ, unit: 'кДж', siVal: A_si };
+                    task.F = { val: F_si, unit: 'Н', siVal: F_si };
+                    task.s = { val: s_si, unit: 'м', siVal: s_si };
+                    if (chosenTarget === 's') { task.s = null; task.correctSI = s_si; }
+                    else if (chosenTarget === 'A') { task.A = null; task.correctSI = A_si; }
+                    else { task.F = null; task.correctSI = F_si; }
+                } else {
+                    const s_si = sc.s_cm / 100; // cm to m
+                    const A_si = sc.A_J;
+                    const F_si = Math.round((A_si / s_si) * 100) / 100;
+                    task.s = { val: sc.s_cm, unit: 'см', siVal: s_si };
+                    task.A = { val: A_si, unit: 'Дж', siVal: A_si };
+                    task.F = { val: F_si, unit: 'Н', siVal: F_si };
+                    if (chosenTarget === 'F') { task.F = null; task.correctSI = F_si; }
+                    else if (chosenTarget === 'A') { task.A = null; task.correctSI = A_si; }
+                    else { task.s = null; task.correctSI = s_si; }
+                }
+            }
+
+            activeTasks.push(task);
+            taskStates[activeTasks.length - 1] = { value: '', status: 'pending' };
+            renderTable();
+            updateScoreDisplay();
+            showToast("Додано нове випадкове завдання!", "info");
+        }
+
+        function showSolution(index) {
+            const task = activeTasks[index];
+            document.getElementById('modal-task-title').innerText = `Завдання №${index + 1} (${currentLevel === 1 ? 'Рівень 1' : 'Рівень 2'})`;
+
+            let content = '';
+
+            // 1. Given
+            let givenText = [];
+            if (task.A) givenText.push(`$A = ${task.A.val}\\text{ ${task.A.unit}}$`);
+            if (task.F) givenText.push(`$F = ${task.F.val}\\text{ ${task.F.unit}}$`);
+            if (task.s) givenText.push(`$s = ${task.s.val}\\text{ ${task.s.unit}}$`);
+
+            content += `
+                <div>
+                    <h4 class="font-bold text-slate-800 border-b pb-1 mb-2">1. Дано:</h4>
+                    <p class="font-mono text-slate-700">${givenText.join(', ')}</p>
+                    <p class="font-mono font-bold text-indigo-600 mt-1">Знайти: ${task.target} = ?</p>
+                </div>
+            `;
+
+            // 2. Unit conversion if Level 2
+            if (currentLevel === 2) {
+                let conversionText = [];
+                if (task.A && task.A.unit !== 'Дж') conversionText.push(`$A = ${task.A.val}\\text{ ${task.A.unit}} = ${task.A.siVal}\\text{ Дж}$`);
+                if (task.F && task.F.unit !== 'Н') conversionText.push(`$F = ${task.F.val}\\text{ ${task.F.unit}} = ${task.F.siVal}\\text{ Н}$`);
+                if (task.s && task.s.unit !== 'м') conversionText.push(`$s = ${task.s.val}\\text{ ${task.s.unit}} = ${task.s.siVal}\\text{ м}$`);
+
+                if (conversionText.length > 0) {
+                    content += `
+                        <div class="mt-3">
+                            <h4 class="font-bold text-slate-800 border-b pb-1 mb-2">2. Переведення в СІ:</h4>
+                            <ul class="list-disc list-inside font-mono text-teal-700 space-y-1">
+                                ${conversionText.map(t => `<li>${t}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+            }
+
+            // 3. Formula and Calculation
+            let formulaStr = '';
+            let calcStr = '';
+            let unitTarget = task.target === 'A' ? 'Дж' : (task.target === 'F' ? 'Н' : 'м');
+
+            if (task.target === 'A') {
+                formulaStr = '$A = F \\cdot s$';
+                const fVal = task.F.siVal || task.F.val;
+                const sVal = task.s.siVal || task.s.val;
+                calcStr = `$A = ${fVal}\\text{ Н} \\cdot ${sVal}\\text{ м} = ${task.correctSI}\\text{ Дж}$`;
+            } else if (task.target === 'F') {
+                formulaStr = '$F = \\frac{A}{s}$';
+                const aVal = task.A.siVal || task.A.val;
+                const sVal = task.s.siVal || task.s.val;
+                calcStr = `$F = \\frac{${aVal}\\text{ Дж}}{${sVal}\\text{ м}} = ${task.correctSI}\\text{ Н}$`;
+            } else if (task.target === 's') {
+                formulaStr = '$s = \\frac{A}{F}$';
+                const aVal = task.A.siVal || task.A.val;
+                const fVal = task.F.siVal || task.F.val;
+                calcStr = `$s = \\frac{${aVal}\\text{ Дж}}{${fVal}\\text{ Н}} = ${task.correctSI}\\text{ м}$`;
+            }
+
+            content += `
+                <div class="mt-3">
+                    <h4 class="font-bold text-slate-800 border-b pb-1 mb-2">3. Формула та обчислення:</h4>
+                    <p class="mb-1">Основна формула: <span class="font-mono font-bold text-indigo-700">${formulaStr}</span></p>
+                    <div class="bg-indigo-50 p-2.5 rounded-lg border border-indigo-100 font-mono font-bold text-indigo-900 mt-2">
+                        ${calcStr}
+                    </div>
+                </div>
+            `;
+
+            // 4. Final Answer
+            content += `
+                <div class="mt-3 pt-2 border-t">
+                    <span class="font-bold text-slate-800">Відповідь:</span>
+                    <span class="font-mono font-bold text-emerald-700 ml-2">${task.target} = ${task.correctSI} ${unitTarget}</span>
+                </div>
+            `;
+
+            document.getElementById('modal-solution-content').innerHTML = content;
+            document.getElementById('solution-modal').classList.remove('hidden');
+
+            // Render LaTeX formulas in the solution modal
+            renderMath();
+        }
+
+        function closeSolutionModal() {
+            document.getElementById('solution-modal').classList.add('hidden');
+        }
+
+        function showToast(text, type = 'info') {
+            const msgBox = document.getElementById('status-message');
+            msgBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-800', 'bg-rose-50', 'border-rose-200', 'text-rose-800', 'bg-indigo-50', 'border-indigo-200', 'text-indigo-800');
+
+            let icon = '<i class="fa-solid fa-circle-info mr-2"></i>';
+            if (type === 'success') {
+                msgBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-800');
+                icon = '<i class="fa-solid fa-circle-check mr-2"></i>';
+            } else if (type === 'warning' || type === 'error') {
+                msgBox.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-800');
+                icon = '<i class="fa-solid fa-triangle-exclamation mr-2"></i>';
+            } else {
+                msgBox.classList.add('bg-indigo-50', 'border-indigo-200', 'text-indigo-800');
+            }
+
+            msgBox.innerHTML = `
+                <div class="flex items-center">
+                    ${icon}
+                    <span>${text}</span>
+                </div>
+                <button onclick="document.getElementById('status-message').classList.add('hidden')" class="ml-4 opacity-60 hover:opacity-100">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+        }
+
+        // Simple Audio Synthesizer for instant sound feedback without external MP3 files
+        function playSound(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15); // E5
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.3);
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
+                    osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.25);
+                }
+            } catch (e) {
+                // Audio context not allowed without interaction or not supported
+            }
+        }
+    </script>
+</body>
+</html>
