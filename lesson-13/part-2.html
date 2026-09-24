@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивна гра: Механічна робота — 8 клас</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- KaTeX for LaTeX Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMath()"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .btn-agree {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+        }
+        .btn-agree:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+        .btn-disagree {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35);
+        }
+        .btn-disagree:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+        }
+        .pulse-correct {
+            animation: pulse-green 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+        }
+        .shake-wrong {
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes pulse-green {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); border-color: #10b981; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .badge-positive {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+        .badge-negative {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .badge-zero {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-grid-pattern flex flex-col justify-between min-h-screen selection:bg-indigo-500 selection:text-white">
+
+    <div>
+        <!-- Top Header Navigation -->
+        <header class="glass-panel sticky top-0 z-40 border-b border-slate-700/60 shadow-xl">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+                <!-- Logo / Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+                        <i class="fa-solid fa-bolt text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-white tracking-wide leading-tight">Фізика 8 клас</h1>
+                        <p class="text-xs text-indigo-300 font-medium">Механічна робота: $A > 0$, $A < 0$ чи $A = 0$?</p>
+                    </div>
+                </div>
+
+                <!-- Mode Switchers -->
+                <div class="flex items-center bg-slate-800/80 p-1 rounded-xl border border-slate-700/80 text-xs sm:text-sm font-semibold">
+                    <button id="nav-practice" onclick="switchMode('practice')" class="px-3 sm:px-4 py-1.5 rounded-lg text-indigo-300 hover:text-white transition-all flex items-center space-x-1.5">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Тренажер</span>
+                    </button>
+                    <button id="nav-arcade" onclick="switchMode('arcade')" class="px-3 sm:px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all flex items-center space-x-1.5">
+                        <i class="fa-solid fa-gamepad text-amber-400"></i>
+                        <span>Аркада</span>
+                    </button>
+                    <button id="nav-theory" onclick="switchMode('theory')" class="px-3 sm:px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all flex items-center space-x-1.5">
+                        <i class="fa-solid fa-book-open text-cyan-400"></i>
+                        <span>Шпаргалка</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT CONTAINER -->
+        <main class="max-w-4xl mx-auto px-4 py-6 sm:py-8">
+
+            <!-- ===================== PRACTICE MODE ===================== -->
+            <div id="view-practice" class="space-y-6">
+                
+                <!-- Progress Header -->
+                <div class="glass-panel rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                            Питання <span id="practice-current-num">1</span> з <span id="practice-total-num">15</span>
+                        </span>
+                        <div class="flex-1 sm:w-48 bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+                            <div id="practice-progress-bar" class="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 text-xs sm:text-sm">
+                        <div class="flex items-center space-x-1 text-emerald-400">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span class="font-bold" id="practice-score-correct">0</span>
+                        </div>
+                        <div class="flex items-center space-x-1 text-rose-400">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            <span class="font-bold" id="practice-score-wrong">0</span>
+                        </div>
+                        <button onclick="restartPractice()" class="text-slate-400 hover:text-indigo-300 transition p-1" title="Перезапустити">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scenario Card -->
+                <div id="practice-card" class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden transition-all duration-300">
+                    <!-- Situation Category Badge -->
+                    <div class="flex justify-between items-center mb-4">
+                        <span id="practice-category" class="text-xs font-semibold text-cyan-300 uppercase tracking-wider bg-cyan-950/60 border border-cyan-800 px-3 py-1 rounded-lg">
+                            Категорія: Тетя та опір
+                        </span>
+                        <span id="practice-work-type-hint" class="text-xs font-mono text-slate-400">
+                            Аналіз фізичної роботи
+                        </span>
+                    </div>
+
+                    <!-- Situation Description -->
+                    <div class="mb-6">
+                        <h2 class="text-slate-300 text-sm font-semibold uppercase tracking-wider mb-2 text-indigo-400 flex items-center">
+                            <i class="fa-solid fa-eye mr-2"></i> Фізична ситуація:
+                        </h2>
+                        <p id="practice-situation-text" class="text-lg sm:text-2xl font-bold text-white leading-relaxed">
+                            Завантаження ситуації...
+                        </p>
+                    </div>
+
+                    <!-- Proposed Statement -->
+                    <div class="bg-indigo-950/40 border border-indigo-500/30 rounded-2xl p-4 sm:p-5 mb-8">
+                        <span class="text-xs font-bold uppercase tracking-wider text-indigo-300 block mb-1">
+                            <i class="fa-solid fa-comment-dots mr-1"></i> Твердження для оцінки:
+                        </span>
+                        <p id="practice-statement-text" class="text-base sm:text-xl font-medium text-indigo-100">
+                            "Завантаження твердження..."
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons: Agree vs Disagree -->
+                    <div id="practice-actions" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="handlePracticeAnswer(true)" class="btn-agree py-4 px-6 rounded-2xl text-white font-bold text-lg sm:text-xl flex items-center justify-center space-x-3 transition transform active:scale-95">
+                            <i class="fa-solid fa-thumbs-up text-2xl"></i>
+                            <span>Погоджуюся</span>
+                        </button>
+
+                        <button onclick="handlePracticeAnswer(false)" class="btn-disagree py-4 px-6 rounded-2xl text-white font-bold text-lg sm:text-xl flex items-center justify-center space-x-3 transition transform active:scale-95">
+                            <i class="fa-solid fa-thumbs-down text-2xl"></i>
+                            <span>Не погоджуюся</span>
+                        </button>
+                    </div>
+
+                    <!-- Explanation Box (Shown after answering) -->
+                    <div id="practice-explanation-box" class="hidden mt-6 p-5 rounded-2xl border transition-all animate-in fade-in duration-300">
+                        <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                            <div class="flex items-center space-x-3">
+                                <div id="explanation-icon-wrapper" class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl shrink-0">
+                                    <i id="explanation-icon" class="fa-solid"></i>
+                                </div>
+                                <div>
+                                    <h3 id="explanation-title" class="text-lg font-bold"></h3>
+                                    <p id="explanation-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full inline-block mt-0.5"></p>
+                                </div>
+                            </div>
+                            <button onclick="nextPracticeQuestion()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition flex items-center space-x-2">
+                                <span>Наступне питання</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== ARCADE MODE ===================== -->
+            <div id="view-arcade" class="hidden space-y-6">
+                <!-- Arcade Start Screen -->
+                <div id="arcade-start-screen" class="glass-panel rounded-3xl p-8 text-center space-y-6">
+                    <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-white text-4xl shadow-xl shadow-amber-500/20">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Аркадний режим: Фізичний Спринт</h2>
+                        <p class="text-slate-300 mt-2 max-w-md mx-auto text-sm sm:text-base">
+                            Дайте якомога більше правильних відповідей за <strong>60 секунд</strong>! 
+                            Збирайте комбо, помножуйте бали та не втратьте 3 життя.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 max-w-md mx-auto text-center">
+                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
+                            <i class="fa-solid fa-stopwatch text-amber-400 text-lg mb-1"></i>
+                            <div class="text-xs text-slate-400">Час</div>
+                            <div class="text-lg font-bold text-white">60 сек</div>
+                        </div>
+                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
+                            <i class="fa-solid fa-heart text-rose-500 text-lg mb-1"></i>
+                            <div class="text-xs text-slate-400">Життя</div>
+                            <div class="text-lg font-bold text-white">3 серця</div>
+                        </div>
+                        <div class="bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
+                            <i class="fa-solid fa-trophy text-yellow-400 text-lg mb-1"></i>
+                            <div class="text-xs text-slate-400">Рекорд</div>
+                            <div id="arcade-high-score" class="text-lg font-bold text-amber-400">0</div>
+                        </div>
+                    </div>
+
+                    <button onclick="startArcadeGame()" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-black text-xl rounded-2xl shadow-xl shadow-orange-500/30 transition transform hover:-translate-y-0.5 active:scale-95">
+                        <i class="fa-solid fa-play mr-2"></i> Розпочати гру!
+                    </button>
+                </div>
+
+                <!-- Arcade Active Game Interface -->
+                <div id="arcade-game-screen" class="hidden space-y-6">
+                    <!-- Arcade Stats Bar -->
+                    <div class="glass-panel rounded-2xl p-4 flex justify-between items-center">
+                        <!-- Timer -->
+                        <div class="flex items-center space-x-2">
+                            <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-slate-400 uppercase font-bold">Залишилося</div>
+                                <div id="arcade-timer" class="text-xl font-black text-white font-mono">60s</div>
+                            </div>
+                        </div>
+
+                        <!-- Score & Multiplier -->
+                        <div class="text-center">
+                            <div id="arcade-multiplier" class="text-xs font-black text-amber-400 tracking-wider">x1 МНОЖНИК</div>
+                            <div id="arcade-score" class="text-2xl font-black text-white tracking-wide">0</div>
+                        </div>
+
+                        <!-- Hearts / Lives -->
+                        <div class="flex items-center space-x-1 text-rose-500 text-xl" id="arcade-lives-container">
+                            <i class="fa-solid fa-heart"></i>
+                            <i class="fa-solid fa-heart"></i>
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                    </div>
+
+                    <!-- Arcade Question Card -->
+                    <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+                        <div class="mb-4 flex justify-between items-center">
+                            <span id="arcade-category" class="text-xs font-semibold text-amber-300 uppercase bg-amber-950/60 border border-amber-800 px-3 py-1 rounded-lg">
+                                Швидке питання
+                            </span>
+                        </div>
+
+                        <p id="arcade-situation-text" class="text-lg sm:text-xl font-bold text-white mb-4">
+                            ...
+                        </p>
+
+                        <div class="bg-indigo-950/40 border border-indigo-500/30 rounded-2xl p-4 mb-6">
+                            <span class="text-xs font-bold uppercase tracking-wider text-indigo-300 block mb-1">
+                                Твердження:
+                            </span>
+                            <p id="arcade-statement-text" class="text-base sm:text-lg font-medium text-indigo-100">
+                                ...
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="handleArcadeAnswer(true)" class="btn-agree py-4 px-4 rounded-2xl text-white font-bold text-lg sm:text-xl flex items-center justify-center space-x-2 transition transform active:scale-95">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <span>Погоджуюся</span>
+                            </button>
+
+                            <button onclick="handleArcadeAnswer(false)" class="btn-disagree py-4 px-4 rounded-2xl text-white font-bold text-lg sm:text-xl flex items-center justify-center space-x-2 transition transform active:scale-95">
+                                <i class="fa-solid fa-thumbs-down"></i>
+                                <span>Не погоджуюся</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arcade Game Over Screen -->
+                <div id="arcade-gameover-screen" class="hidden glass-panel rounded-3xl p-8 text-center space-y-6">
+                    <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-rose-500 to-indigo-600 flex items-center justify-center text-white text-4xl shadow-xl shadow-rose-500/30">
+                        <i class="fa-solid fa-flag-checkered"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="text-3xl font-extrabold text-white">Час вичерпано!</h2>
+                        <p class="text-slate-300 mt-1 text-sm">Чудова робота! Ось ваші результати:</p>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-6 rounded-2xl border border-slate-800 max-w-sm mx-auto space-y-3">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-400">Зароблено балів:</span>
+                            <span id="gameover-final-score" class="text-2xl font-black text-amber-400">0</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-400">Правильних відповідей:</span>
+                            <span id="gameover-correct-count" class="font-bold text-emerald-400">0</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-400">Найбільша серія (Combo):</span>
+                            <span id="gameover-max-streak" class="font-bold text-indigo-400">0</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="startArcadeGame()" class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg transition">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Грати знову
+                        </button>
+                        <button onclick="switchMode('practice')" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl border border-slate-700 transition">
+                            Повернутися до тренажера
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== THEORY / CHEATSHEET MODE ===================== -->
+            <div id="view-theory" class="hidden space-y-6">
+                <!-- Theory Card 1: Core Formula -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-4">
+                    <div class="flex items-center space-x-3 text-cyan-400">
+                        <i class="fa-solid fa-book-open text-2xl"></i>
+                        <h2 class="text-2xl font-bold text-white">Формула механічної роботи (8 клас)</h2>
+                    </div>
+
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Механічна робота $A$ — це фізична величина, яка дорівнює добутку модуля сили $F$ на шлях $s$, пройдений тілом у напрямку дії цієї сили:
+                    </p>
+
+                    <div class="bg-indigo-950/60 p-4 rounded-2xl text-center border border-indigo-500/30 text-2xl font-mono text-indigo-200">
+                        $$A = F \cdot s$$
+                    </div>
+                </div>
+
+                <!-- Theory Card 2: Summary Rules Table -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-4">
+                    <h3 class="text-xl font-bold text-white mb-4">Як визначити знак механічної роботи?</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Case 1: Positive -->
+                        <div class="bg-emerald-950/30 border border-emerald-500/30 p-5 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="badge-positive px-3 py-1 rounded-full text-xs font-bold">$A > 0$</span>
+                                <i class="fa-solid fa-arrow-right-long text-emerald-400 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-emerald-300 text-base">Додатна робота</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Напрямок сили <strong>збігається</strong> з напрямком руху тіла (сила розганяє або тягне тіло вперед).
+                            </p>
+                        </div>
+
+                        <!-- Case 2: Zero -->
+                        <div class="bg-amber-950/30 border border-amber-500/30 p-5 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="badge-zero px-3 py-1 rounded-full text-xs font-bold">$A = 0$</span>
+                                <i class="fa-solid fa-arrows-up-down text-amber-400 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-amber-300 text-base">Робота дорівнює 0</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Сила напрямлена <strong>перпендикулярно</strong> до напрямку руху, або тіло залишається <strong>нерухомим</strong> ($s = 0$).
+                            </p>
+                        </div>
+
+                        <!-- Case 3: Negative -->
+                        <div class="bg-rose-950/30 border border-rose-500/30 p-5 rounded-2xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="badge-negative px-3 py-1 rounded-full text-xs font-bold">$A < 0$</span>
+                                <i class="fa-solid fa-arrow-left-long text-rose-400 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-rose-300 text-base">Від'ємна робота</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Сила напрямлена <strong>проти</strong> напрямку руху тіла (наприклад, сила тертя або сила опору, що гальмує тіло).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950/80 py-6 text-center text-xs text-slate-500">
+        <p>Інтерактивна навчальна гра з фізики • 8 клас • Розділ: Механічна робота та енергія</p>
+    </footer>
+
+    <script>
+        // Database of Physics Scenarios for 8th Grade Physics
+        const physicsScenarios = [
+            {
+                id: 1,
+                category: "Двигуни та тяга",
+                situation: "Хлопчик штовхає санчата, приклавши силу в напрямку їхнього руху, і санчата прискорюються.",
+                statement: "Сила, з якою хлопчик тисне на санчата, виконує додатну роботу ($A > 0$).",
+                isAgreeCorrect: true,
+                workType: "positive"
+            },
+            {
+                id: 2,
+                category: "Тертя та опір",
+                situation: "Ковзаняр котиться по льоду і поступово зупиняється під дією сили тертя ковзання.",
+                statement: "Сила тертя ковзання у цьому випадку виконує додатну роботу ($A > 0$).",
+                isAgreeCorrect: false,
+                workType: "negative"
+            },
+            {
+                id: 3,
+                category: "Нерухомий стан ($s=0$)",
+                situation: "Спортсмен утримує важку штангу в нерухомому стані над головою протягом 5 секунд.",
+                statement: "Під час утримування штанги м'язова сила спортсмена виконує додатну механічну роботу.",
+                isAgreeCorrect: false,
+                workType: "zero"
+            },
+            {
+                id: 4,
+                category: "Сила реакції опори",
+                situation: "Офіціант переносить піднос із напоями, рухаючись горизонтальною підлогою зі сталою швидкістю.",
+                statement: "Сила реакції опори, що діє на піднос з боку рук офіціанта, виконує роботу, яка дорівнює нулю ($A = 0$).",
+                isAgreeCorrect: true,
+                workType: "zero"
+            },
+            {
+                id: 5,
+                category: "Сила тяжіння",
+                situation: "Яблуко відривається від гілки і падає вертикально вниз під дією сили тяжіння.",
+                statement: "Сила тяжіння під час падіння яблука виконує додатну роботу ($A > 0$).",
+                isAgreeCorrect: true,
+                workType: "positive"
+            },
+            {
+                id: 6,
+                category: "Сила тяжіння",
+                situation: "М'яч підкидають вертикально вгору. Розглядаємо рух м'яча під час підйому.",
+                statement: "Під час підйому м'яча сила тяжіння виконує від'ємну роботу ($A < 0$).",
+                isAgreeCorrect: true,
+                workType: "negative"
+            },
+            {
+                id: 7,
+                category: "Сила пружності",
+                situation: "Підйомний кран піднімає залізобетонну плиту вертикально вгору на 5-й поверх.",
+                statement: "Сила натягу сталевого троса крана виконує від'ємну роботу ($A < 0$).",
+                isAgreeCorrect: false,
+                workType: "positive"
+            },
+            {
+                id: 8,
+                category: "Опір середовища",
+                situation: "Парашутист рівномірно опускається на парашуті до землі.",
+                statement: "Сила опору повітря, що діє на купол парашута, виконує від'ємну роботу ($A < 0$).",
+                isAgreeCorrect: true,
+                workType: "negative"
+            },
+            {
+                id: 9,
+                category: "Рух по колу",
+                situation: "Супутник рухається коловою орбітою навколо Землі під дією сили всесвітнього тяжіння.",
+                statement: "Сила тяжіння Землі виконує додатну роботу під час руху супутника коловою орбітою.",
+                isAgreeCorrect: false,
+                workType: "zero"
+            },
+            {
+                id: 10,
+                category: "Гальмування",
+                situation: "Водій тисне на педаль гальма, і автомобіль зупиняється перед світлофором.",
+                statement: "Робота сили тертя гальмівних колодок і коліс об дорогу є від'ємною ($A < 0$).",
+                isAgreeCorrect: true,
+                workType: "negative"
+            },
+            {
+                id: 11,
+                category: "Похила площина",
+                situation: "Дитина з'їжджає на санчатах з льодяної гірки.",
+                statement: "Сила реакції опори гірки (перпендикулярна до поверхні гірки) виконує додатну роботу.",
+                isAgreeCorrect: false,
+                workType: "zero"
+            },
+            {
+                id: 12,
+                category: "Деформація та пружність",
+                situation: "Стрілець натягує тятиву лука, готуючись до пострілу.",
+                statement: "Сила пружності, що виникає в луці під час розтягування, виконує від'ємну роботу ($A < 0$).",
+                isAgreeCorrect: true,
+                workType: "negative"
+            },
+            {
+                id: 13,
+                category: "Удар і поштовх",
+                situation: "Футболіст копає м'яч, надаючи йому початкової швидкості для польоту.",
+                statement: "Під час короткого контакту ноги з м'ячем сила удару виконує додатну роботу ($A > 0$).",
+                isAgreeCorrect: true,
+                workType: "positive"
+            },
+            {
+                id: 14,
+                category: "Магнетизм",
+                situation: "Магніт наближають до залізної скріпки, і скріпка притягується та летить до магніту.",
+                statement: "Магнітна сила, що діє на скріпку під час її руху до магніту, виконує додатну роботу ($A > 0$).",
+                isAgreeCorrect: true,
+                workType: "positive"
+            },
+            {
+                id: 15,
+                category: "Нерухомий стіл ($s=0$)",
+                situation: "Важка книга спокійно лежить на горизонтальному столі. Учень тисне на неї зверху пальцем.",
+                statement: "Сила тиску пальця учня виконує додатну механічну роботу.",
+                isAgreeCorrect: false,
+                workType: "zero"
+            }
+        ];
+
+        // Game State Variables
+        let currentMode = 'practice'; // 'practice' | 'arcade' | 'theory'
+        
+        // Practice State
+        let practiceIndex = 0;
+        let practiceCorrectCount = 0;
+        let practiceWrongCount = 0;
+        let practiceAnswered = false;
+
+        // Arcade State
+        let arcadeTimer = 60;
+        let arcadeTimerInterval = null;
+        let arcadeScore = 0;
+        let arcadeLives = 3;
+        let arcadeCombo = 0;
+        let arcadeMaxStreak = 0;
+        let arcadeCorrectCount = 0;
+        let arcadeCurrentScenario = null;
+        let arcadeHighScore = parseInt(localStorage.getItem('physics_work_arcade_hi') || '0');
+
+        // Audio Effects Synthesizer (Web Audio API)
+        function playAudio(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.12); // E5
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.25);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(240, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(130, ctx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.25);
+                } else if (type === 'gameover') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(300, ctx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(150, ctx.currentTime + 0.5);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.5);
+                }
+            } catch (e) {
+                // Audio context suppressed or unsupported
+            }
+        }
+
+        // KaTeX Math Rendering helper
+        function renderMath() {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        // Initialize on Load
+        window.onload = function() {
+            document.getElementById('arcade-high-score').innerText = arcadeHighScore;
+            loadPracticeQuestion(0);
+            renderMath();
+        };
+
+        // Navigation Mode Switcher
+        function switchMode(mode) {
+            currentMode = mode;
+
+            // Hide all views
+            document.getElementById('view-practice').classList.add('hidden');
+            document.getElementById('view-arcade').classList.add('hidden');
+            document.getElementById('view-theory').classList.add('hidden');
+
+            // Reset Nav Button styles
+            ['practice', 'arcade', 'theory'].forEach(m => {
+                const btn = document.getElementById(`nav-${m}`);
+                btn.className = "px-3 sm:px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all flex items-center space-x-1.5";
+            });
+
+            // Activate chosen view
+            document.getElementById(`view-${mode}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${mode}`);
+            activeBtn.className = "px-3 sm:px-4 py-1.5 rounded-lg bg-indigo-600 text-white shadow-md font-bold flex items-center space-x-1.5 transition-all";
+
+            // Pause arcade timer if switching away
+            if (mode !== 'arcade' && arcadeTimerInterval) {
+                clearInterval(arcadeTimerInterval);
+            }
+
+            renderMath();
+        }
+
+        // Load Practice Question
+        function loadPracticeQuestion(index) {
+            practiceIndex = index;
+            practiceAnswered = false;
+
+            const sc = physicsScenarios[practiceIndex];
+
+            // Update Progress bar & Numbers
+            document.getElementById('practice-current-num').innerText = practiceIndex + 1;
+            document.getElementById('practice-total-num').innerText = physicsScenarios.length;
+            const pct = ((practiceIndex) / physicsScenarios.length) * 100;
+            document.getElementById('practice-progress-bar').style.width = `${pct}%`;
+
+            // Text
+            document.getElementById('practice-category').innerText = `Категорія: ${sc.category}`;
+            document.getElementById('practice-situation-text').innerText = sc.situation;
+            document.getElementById('practice-statement-text').innerText = sc.statement;
+
+            // Hide explanation & enable action buttons
+            const expBox = document.getElementById('practice-explanation-box');
+            expBox.classList.add('hidden');
+
+            document.getElementById('practice-actions').classList.remove('hidden');
+            document.getElementById('practice-card').classList.remove('pulse-correct', 'shake-wrong');
+
+            renderMath();
+        }
+
+        // Handle Practice User Answer
+        function handlePracticeAnswer(userAgreed) {
+            if (practiceAnswered) return;
+            practiceAnswered = true;
+
+            const sc = physicsScenarios[practiceIndex];
+            const isCorrect = (userAgreed === sc.isAgreeCorrect);
+
+            const expBox = document.getElementById('practice-explanation-box');
+            const iconWrapper = document.getElementById('explanation-icon-wrapper');
+            const icon = document.getElementById('explanation-icon');
+            const title = document.getElementById('explanation-title');
+            const badge = document.getElementById('explanation-badge');
+            const card = document.getElementById('practice-card');
+
+            if (isCorrect) {
+                practiceCorrectCount++;
+                playAudio('correct');
+                card.classList.add('pulse-correct');
+
+                expBox.className = "mt-6 p-4 rounded-2xl border transition-all animate-in fade-in duration-300 bg-emerald-950/40 border-emerald-500/40";
+                iconWrapper.className = "w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xl shrink-0";
+                icon.className = "fa-solid fa-circle-check";
+                title.innerText = "Правильно! 🎉";
+                title.className = "text-lg font-bold text-emerald-300";
+            } else {
+                practiceWrongCount++;
+                playAudio('wrong');
+                card.classList.add('shake-wrong');
+
+                expBox.className = "mt-6 p-4 rounded-2xl border transition-all animate-in fade-in duration-300 bg-rose-950/40 border-rose-500/40";
+                iconWrapper.className = "w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xl shrink-0";
+                icon.className = "fa-solid fa-circle-xmark";
+                title.innerText = "Неправильно!";
+                title.className = "text-lg font-bold text-rose-300";
+            }
+
+            // Work type badge
+            if (sc.workType === 'positive') {
+                badge.innerText = "Знак роботи: A > 0 (Додатна)";
+                badge.className = "badge-positive text-xs font-bold px-2.5 py-0.5 rounded-full inline-block mt-0.5";
+            } else if (sc.workType === 'negative') {
+                badge.innerText = "Знак роботи: A < 0 (Від'ємна)";
+                badge.className = "badge-negative text-xs font-bold px-2.5 py-0.5 rounded-full inline-block mt-0.5";
+            } else {
+                badge.innerText = "Знак роботи: A = 0 (Дорівнює нулю)";
+                badge.className = "badge-zero text-xs font-bold px-2.5 py-0.5 rounded-full inline-block mt-0.5";
+            }
+
+            document.getElementById('practice-score-correct').innerText = practiceCorrectCount;
+            document.getElementById('practice-score-wrong').innerText = practiceWrongCount;
+
+            document.getElementById('practice-actions').classList.add('hidden');
+            expBox.classList.remove('hidden');
+
+            renderMath();
+        }
+
+        function nextPracticeQuestion() {
+            if (practiceIndex < physicsScenarios.length - 1) {
+                loadPracticeQuestion(practiceIndex + 1);
+            } else {
+                // Practice complete
+                alert(`Вітаємо! Ви пройшли всі ${physicsScenarios.length} питань тренажера! Правильних відповідей: ${practiceCorrectCount}.`);
+                restartPractice();
+            }
+        }
+
+        function restartPractice() {
+            practiceIndex = 0;
+            practiceCorrectCount = 0;
+            practiceWrongCount = 0;
+            document.getElementById('practice-score-correct').innerText = '0';
+            document.getElementById('practice-score-wrong').innerText = '0';
+            loadPracticeQuestion(0);
+        }
+
+        // ARCADE MODE LOGIC
+        function startArcadeGame() {
+            document.getElementById('arcade-start-screen').classList.add('hidden');
+            document.getElementById('arcade-gameover-screen').classList.add('hidden');
+            document.getElementById('arcade-game-screen').classList.remove('hidden');
+
+            arcadeTimer = 60;
+            arcadeScore = 0;
+            arcadeLives = 3;
+            arcadeCombo = 0;
+            arcadeMaxStreak = 0;
+            arcadeCorrectCount = 0;
+
+            updateArcadeUI();
+
+            if (arcadeTimerInterval) clearInterval(arcadeTimerInterval);
+            arcadeTimerInterval = setInterval(() => {
+                arcadeTimer--;
+                document.getElementById('arcade-timer').innerText = `${arcadeTimer}s`;
+
+                if (arcadeTimer <= 0) {
+                    endArcadeGame();
+                }
+            }, 1000);
+
+            nextArcadeQuestion();
+        }
+
+        function nextArcadeQuestion() {
+            // Pick a random scenario from pool
+            const randomIndex = Math.floor(Math.random() * physicsScenarios.length);
+            arcadeCurrentScenario = physicsScenarios[randomIndex];
+
+            document.getElementById('arcade-category').innerText = `Категорія: ${arcadeCurrentScenario.category}`;
+            document.getElementById('arcade-situation-text').innerText = arcadeCurrentScenario.situation;
+            document.getElementById('arcade-statement-text').innerText = arcadeCurrentScenario.statement;
+
+            renderMath();
+        }
+
+        function handleArcadeAnswer(userAgreed) {
+            if (!arcadeCurrentScenario) return;
+
+            const isCorrect = (userAgreed === arcadeCurrentScenario.isAgreeCorrect);
+
+            if (isCorrect) {
+                playAudio('correct');
+                arcadeCombo++;
+                arcadeCorrectCount++;
+                if (arcadeCombo > arcadeMaxStreak) arcadeMaxStreak = arcadeCombo;
+
+                // Multiplier calculation (1x, 2x, 3x, 5x)
+                let multiplier = 1;
+                if (arcadeCombo >= 8) multiplier = 5;
+                else if (arcadeCombo >= 5) multiplier = 3;
+                else if (arcadeCombo >= 3) multiplier = 2;
+
+                arcadeScore += 100 * multiplier;
+            } else {
+                playAudio('wrong');
+                arcadeCombo = 0;
+                arcadeLives--;
+
+                if (arcadeLives <= 0) {
+                    endArcadeGame();
+                    return;
+                }
+            }
+
+            updateArcadeUI();
+            nextArcadeQuestion();
+        }
+
+        function updateArcadeUI() {
+            document.getElementById('arcade-score').innerText = arcadeScore;
+
+            // Multiplier text
+            let multText = 'x1 МНОЖНИК';
+            if (arcadeCombo >= 8) multText = '🔥 x5 МНОЖНИК!';
+            else if (arcadeCombo >= 5) multText = '⚡ x3 МНОЖНИК!';
+            else if (arcadeCombo >= 3) multText = '✨ x2 МНОЖНИК!';
+            document.getElementById('arcade-multiplier').innerText = multText;
+
+            // Render Lives Hearts
+            let heartsHtml = '';
+            for (let i = 0; i < 3; i++) {
+                if (i < arcadeLives) {
+                    heartsHtml += `<i class="fa-solid fa-heart"></i>`;
+                } else {
+                    heartsHtml += `<i class="fa-regular fa-heart opacity-30"></i>`;
+                }
+            }
+            document.getElementById('arcade-lives-container').innerHTML = heartsHtml;
+        }
+
+        function endArcadeGame() {
+            if (arcadeTimerInterval) clearInterval(arcadeTimerInterval);
+            playAudio('gameover');
+
+            document.getElementById('arcade-game-screen').classList.add('hidden');
+            document.getElementById('arcade-gameover-screen').classList.remove('hidden');
+
+            document.getElementById('gameover-final-score').innerText = arcadeScore;
+            document.getElementById('gameover-correct-count').innerText = arcadeCorrectCount;
+            document.getElementById('gameover-max-streak').innerText = `${arcadeMaxStreak} поспіль`;
+
+            // Save High Score
+            if (arcadeScore > arcadeHighScore) {
+                arcadeHighScore = arcadeScore;
+                localStorage.setItem('physics_work_arcade_hi', arcadeHighScore);
+                document.getElementById('arcade-high-score').innerText = arcadeHighScore;
+            }
+        }
+
+        // THEORY INSPECTOR SLIDER ROUTINE
+        function updateAngleInspector(val) {
+            const angle = parseInt(val);
+            document.getElementById('slider-angle-val').innerText = `${angle}°`;
+
+            const badge = document.getElementById('inspector-badge');
+            const desc = document.getElementById('inspector-desc');
+            const cosVal = document.getElementById('inspector-cos-val');
+
+            const rad = angle * (Math.PI / 180);
+            const cos = Math.cos(rad).toFixed(2);
+
+            cosVal.innerHTML = `$\\cos(${angle}^\\circ) = ${cos > 0 ? '+' : ''}${cos}$`;
+
+            if (angle < 90) {
+                badge.innerText = "$A > 0$ (Додатна робота)";
+                badge.className = "badge-positive font-bold text-xs px-3 py-1 rounded-full inline-block";
+                desc.innerText = `Кут α = ${angle}° є гострим. Сила та переміщення напрямлені в один бік. Робота збільшує енергію тіла.`;
+            } else if (angle === 90) {
+                badge.innerText = "$A = 0$ (Робота дорівнює нулю)";
+                badge.className = "badge-zero font-bold text-xs px-3 py-1 rounded-full inline-block";
+                desc.innerText = `Кут α = 90° (перпендикулярно). Сила не здійснює переміщення в напрямку своєї дії. Робота відсутня.`;
+            } else {
+                badge.innerText = "$A < 0$ (Від'ємна робота)";
+                badge.className = "badge-negative font-bold text-xs px-3 py-1 rounded-full inline-block";
+                desc.innerText = `Кут α = ${angle}° є тупим. Сила діє проти руху тіла (наприклад, сила тертя) та гальмує його.`;
+            }
+
+            renderMath();
+        }
+    </script>
+</body>
+</html>
