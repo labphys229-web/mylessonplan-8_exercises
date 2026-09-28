@@ -53,7 +53,7 @@
                     Механічна робота, Сила та Шлях
                 </h1>
                 <p class="text-indigo-100 max-w-2xl mx-auto text-sm sm:text-base">
-                    Розраховуйте невідому величину ($A$, $F$ або $s$) та перевіряйте свої знання. 
+                    Розраховуйте невідому величину ($A$, $F$ або $\ell$) та перевіряйте свої знання. 
                     Пам'ятайте про переведення одиниць вимірювання в систему СІ!
                 </p>
             </div>
@@ -73,15 +73,15 @@
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                                 <span>Робота:</span>
-                                <span class="font-mono font-bold text-indigo-700">$A = F \cdot s$</span>
+                                <span class="font-mono font-bold text-indigo-700">$A = F \cdot \ell$</span>
                             </div>
                             <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                                 <span>Сила:</span>
-                                <span class="font-mono font-bold text-indigo-700">$F = \frac{A}{s}$</span>
+                                <span class="font-mono font-bold text-indigo-700">$F = \frac{A}{\ell}$</span>
                             </div>
                             <div class="flex justify-between items-center bg-slate-50 p-2 rounded-lg">
                                 <span>Шлях:</span>
-                                <span class="font-mono font-bold text-indigo-700">$s = \frac{A}{F}$</span>
+                                <span class="font-mono font-bold text-indigo-700">$\ell = \frac{A}{F}$</span>
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
                             <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-mono font-medium">Н (Ньютон)</span>
                         </li>
                         <li class="flex items-center space-x-2">
-                            <span class="w-20 font-semibold text-slate-800">Шлях (s):</span>
+                            <span class="w-20 font-semibold text-slate-800">Шлях ($\ell$):</span>
                             <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-mono font-medium">м (Метр)</span>
                         </li>
                     </ul>
@@ -186,7 +186,7 @@
                                 <th class="py-4 px-4 w-1/4">
                                     <div class="flex items-center space-x-1.5">
                                         <span class="w-2.5 h-2.5 rounded-full bg-teal-500 inline-block"></span>
-                                        <span>Пройдений шлях ($s$)</span>
+                                        <span>Пройдений шлях ($\ell$)</span>
                                     </div>
                                 </th>
                                 <th class="py-4 px-4 text-center w-40">Дія / Статус</th>
@@ -257,11 +257,11 @@
     <script>
         // Preset tasks for Level 1 (All SI units)
         const level1Tasks = [
-            { id: 1, F: { val: 50, unit: 'Н' }, s: { val: 4, unit: 'м' }, A: null, target: 'A', correctSI: 200 },
-            { id: 2, A: { val: 600, unit: 'Дж' }, F: { val: 30, unit: 'Н' }, s: null, target: 's', correctSI: 20 },
-            { id: 3, A: { val: 1500, unit: 'Дж' }, s: { val: 50, unit: 'м' }, F: null, target: 'F', correctSI: 30 },
-            { id: 4, F: { val: 12, unit: 'Н' }, s: { val: 15, unit: 'м' }, A: null, target: 'A', correctSI: 180 },
-            { id: 5, A: { val: 480, unit: 'Дж' }, F: { val: 60, unit: 'Н' }, s: null, target: 's', correctSI: 8 }
+            { id: 1, F: { val: 50, unit: 'Н' }, l: { val: 4, unit: 'м' }, A: null, target: 'A', correctSI: 200 },
+            { id: 2, A: { val: 600, unit: 'Дж' }, F: { val: 30, unit: 'Н' }, l: null, target: 'l', correctSI: 20 },
+            { id: 3, A: { val: 1500, unit: 'Дж' }, l: { val: 50, unit: 'м' }, F: null, target: 'F', correctSI: 30 },
+            { id: 4, F: { val: 12, unit: 'Н' }, l: { val: 15, unit: 'м' }, A: null, target: 'A', correctSI: 180 },
+            { id: 5, A: { val: 480, unit: 'Дж' }, F: { val: 60, unit: 'Н' }, l: null, target: 'l', correctSI: 8 }
         ];
 
         // Preset tasks for Level 2 (Requires conversion to SI)
@@ -269,7 +269,7 @@
             { 
                 id: 1, 
                 F: { val: 2, unit: 'кН', siVal: 2000 }, 
-                s: { val: 5, unit: 'м', siVal: 5 }, 
+                l: { val: 5, unit: 'м', siVal: 5 }, 
                 A: null, 
                 target: 'A', 
                 correctSI: 10000,
@@ -279,15 +279,15 @@
                 id: 2, 
                 A: { val: 3.6, unit: 'кДж', siVal: 3600 }, 
                 F: { val: 400, unit: 'Н', siVal: 400 }, 
-                s: null, 
-                target: 's', 
+                l: null, 
+                target: 'l', 
                 correctSI: 9,
                 hint: "3.6 кДж = 3600 Дж. Шлях = 3600 Дж / 400 Н = 9 м"
             },
             { 
                 id: 3, 
                 A: { val: 240, unit: 'Дж', siVal: 240 }, 
-                s: { val: 80, unit: 'см', siVal: 0.8 }, 
+                l: { val: 80, unit: 'см', siVal: 0.8 }, 
                 F: null, 
                 target: 'F', 
                 correctSI: 300,
@@ -296,7 +296,7 @@
             { 
                 id: 4, 
                 F: { val: 1.5, unit: 'кН', siVal: 1500 }, 
-                s: { val: 20, unit: 'см', siVal: 0.2 }, 
+                l: { val: 20, unit: 'см', siVal: 0.2 }, 
                 A: null, 
                 target: 'A', 
                 correctSI: 300,
@@ -305,7 +305,7 @@
             { 
                 id: 5, 
                 A: { val: 0.5, unit: 'кДж', siVal: 500 }, 
-                s: { val: 25, unit: 'м', siVal: 25 }, 
+                l: { val: 25, unit: 'м', siVal: 25 }, 
                 F: null, 
                 target: 'F', 
                 correctSI: 20,
@@ -314,7 +314,7 @@
             { 
                 id: 6, 
                 F: { val: 250, unit: 'Н', siVal: 250 }, 
-                s: { val: 1.2, unit: 'км', siVal: 1200 }, 
+                l: { val: 1.2, unit: 'км', siVal: 1200 }, 
                 A: null, 
                 target: 'A', 
                 correctSI: 300000,
@@ -324,7 +324,7 @@
 
         let currentLevel = 1;
         let activeTasks = [];
-        let taskStates = {}; // Stores user inputs and validation state per task index
+        let taskStates = {};
 
         window.onload = function() {
             initLevel(1);
@@ -345,14 +345,11 @@
         function initLevel(lvl) {
             currentLevel = lvl;
             if (lvl === 1) {
-                // Clone level 1 tasks
                 activeTasks = JSON.parse(JSON.stringify(level1Tasks));
             } else {
-                // Clone level 2 tasks
                 activeTasks = JSON.parse(JSON.stringify(level2Tasks));
             }
             
-            // Reset state
             taskStates = {};
             activeTasks.forEach((_, idx) => {
                 taskStates[idx] = { value: '', status: 'pending' };
@@ -390,7 +387,6 @@
                 tr.className = "hover:bg-slate-50/80 transition-colors duration-150";
                 tr.id = `task-row-${index}`;
 
-                // Index column
                 let html = `<td class="py-4 px-4 text-center font-bold text-slate-400">${index + 1}</td>`;
 
                 // Work Column (A)
@@ -399,10 +395,9 @@
                 // Force Column (F)
                 html += renderCellContent(task, 'F', index);
 
-                // Distance Column (s)
-                html += renderCellContent(task, 's', index);
+                // Distance Column (l)
+                html += renderCellContent(task, 'l', index);
 
-                // Action Column
                 const state = taskStates[index] || { status: 'pending' };
                 let statusBadge = '';
 
@@ -439,28 +434,26 @@
                 tbody.appendChild(tr);
             });
 
-            // Render LaTeX formulas in table headers and cells
             renderMath();
         }
 
         function renderCellContent(task, key, index) {
             const isTarget = task.target === key;
             const targetSIUnit = key === 'A' ? 'Дж' : (key === 'F' ? 'Н' : 'м');
+            const displayKey = key === 'l' ? '\\ell' : key;
 
             if (!isTarget) {
-                // Known value
                 const data = task[key];
                 return `
                     <td class="py-4 px-4">
                         <div class="font-medium text-slate-800 bg-slate-100/70 inline-block px-3 py-1.5 rounded-xl border border-slate-200/60">
-                            <span class="text-xs font-semibold text-slate-500 mr-1">${key} =</span>
+                            <span class="text-xs font-semibold text-slate-500 mr-1">$${displayKey} =$</span>
                             <span class="font-bold">${data.val}</span> 
                             <span class="text-slate-600 text-xs font-medium">${data.unit}</span>
                         </div>
                     </td>
                 `;
             } else {
-                // Target value to calculate (Input box)
                 const userVal = taskStates[index] ? taskStates[index].value : '';
                 const state = taskStates[index] ? taskStates[index].status : 'pending';
 
@@ -471,7 +464,7 @@
                 return `
                     <td class="py-4 px-4">
                         <div class="relative flex items-center max-w-[170px]">
-                            <span class="absolute left-3 text-xs font-bold text-indigo-600 pointer-events-none">${key} =</span>
+                            <span class="absolute left-3 text-xs font-bold text-indigo-600 pointer-events-none">$${displayKey} =$</span>
                             <input 
                                 type="number" 
                                 step="any"
@@ -491,7 +484,6 @@
         function handleInputChange(index, val) {
             if (!taskStates[index]) taskStates[index] = {};
             taskStates[index].value = val.trim();
-            // Reset status when user edits
             if (taskStates[index].status !== 'pending') {
                 taskStates[index].status = 'pending';
                 renderTable();
@@ -510,7 +502,6 @@
             const numVal = parseFloat(state.value.replace(',', '.'));
             const expected = task.correctSI;
 
-            // Allow small float margin error (e.g. 0.01)
             if (Math.abs(numVal - expected) < 0.01) {
                 state.status = 'correct';
                 playSound('correct');
@@ -567,65 +558,63 @@
         }
 
         function generateRandomTask() {
-            const targets = ['A', 'F', 's'];
+            const targets = ['A', 'F', 'l'];
             const chosenTarget = targets[Math.floor(Math.random() * targets.length)];
             const isLvl2 = currentLevel === 2;
 
             let task = { id: activeTasks.length + 1, target: chosenTarget };
 
             if (!isLvl2) {
-                // Level 1: Random SI values
-                const F_val = Math.floor(Math.random() * 40 + 5) * 5; // e.g. 25..200 N
-                const s_val = Math.floor(Math.random() * 20 + 2); // e.g. 2..22 m
-                const A_val = F_val * s_val;
+                const F_val = Math.floor(Math.random() * 40 + 5) * 5;
+                const l_val = Math.floor(Math.random() * 20 + 2);
+                const A_val = F_val * l_val;
 
                 task.F = { val: F_val, unit: 'Н' };
-                task.s = { val: s_val, unit: 'м' };
+                task.l = { val: l_val, unit: 'м' };
                 task.A = { val: A_val, unit: 'Дж' };
                 
                 if (chosenTarget === 'A') { task.A = null; task.correctSI = A_val; }
                 if (chosenTarget === 'F') { task.F = null; task.correctSI = F_val; }
-                if (chosenTarget === 's') { task.s = null; task.correctSI = s_val; }
+                if (chosenTarget === 'l') { task.l = null; task.correctSI = l_val; }
 
             } else {
-                // Level 2: Random non-SI conversions
                 const scenarios = [
-                    { type: 'kN_m', F_kN: (Math.floor(Math.random() * 5) + 1), s_m: Math.floor(Math.random() * 10) + 2 },
+                    { type: 'kN_m', F_kN: (Math.floor(Math.random() * 5) + 1), l_m: Math.floor(Math.random() * 10) + 2 },
                     { type: 'kJ_N', A_kJ: (Math.floor(Math.random() * 8) + 1) * 0.5, F_N: Math.floor(Math.random() * 10 + 1) * 50 },
-                    { type: 'J_cm', A_J: Math.floor(Math.random() * 20 + 5) * 10, s_cm: (Math.floor(Math.random() * 10) + 1) * 10 }
+                    { type: 'J_cm', A_J: Math.floor(Math.random() * 20 + 5) * 10, l_cm: (Math.floor(Math.random() * 10) + 1) * 10 }
                 ];
                 const sc = scenarios[Math.floor(Math.random() * scenarios.length)];
 
                 if (sc.type === 'kN_m') {
                     const F_si = sc.F_kN * 1000;
-                    const s_si = sc.s_m;
-                    const A_si = F_si * s_si;
+                    const l_si = sc.l_m;
+                    const A_si = F_si * l_si;
                     task.F = { val: sc.F_kN, unit: 'кН', siVal: F_si };
-                    task.s = { val: s_si, unit: 'м', siVal: s_si };
+                    task.l = { val: l_si, unit: 'м', siVal: l_si };
                     task.A = { val: A_si, unit: 'Дж', siVal: A_si };
                     if (chosenTarget === 'A') { task.A = null; task.correctSI = A_si; }
                     else if (chosenTarget === 'F') { task.F = null; task.correctSI = F_si; }
-                    else { task.s = null; task.correctSI = s_si; }
+                    else { task.l = null; task.correctSI = l_si; }
                 } else if (sc.type === 'kJ_N') {
                     const A_si = sc.A_kJ * 1000;
                     const F_si = sc.F_N;
-                    const s_si = Math.round((A_si / F_si) * 100) / 100;
+                    const l_si = Math.round((A_si / F_si) * 100) / 100;
                     task.A = { val: sc.A_kJ, unit: 'кДж', siVal: A_si };
                     task.F = { val: F_si, unit: 'Н', siVal: F_si };
-                    task.s = { val: s_si, unit: 'м', siVal: s_si };
-                    if (chosenTarget === 's') { task.s = null; task.correctSI = s_si; }
+                    task.l = { val: l_si, unit: 'м', siVal: l_si };
+                    if (chosenTarget === 'l') { task.l = null; task.correctSI = l_si; }
                     else if (chosenTarget === 'A') { task.A = null; task.correctSI = A_si; }
                     else { task.F = null; task.correctSI = F_si; }
                 } else {
-                    const s_si = sc.s_cm / 100; // cm to m
+                    const l_si = sc.l_cm / 100;
                     const A_si = sc.A_J;
-                    const F_si = Math.round((A_si / s_si) * 100) / 100;
-                    task.s = { val: sc.s_cm, unit: 'см', siVal: s_si };
+                    const F_si = Math.round((A_si / l_si) * 100) / 100;
+                    task.l = { val: sc.l_cm, unit: 'см', siVal: l_si };
                     task.A = { val: A_si, unit: 'Дж', siVal: A_si };
                     task.F = { val: F_si, unit: 'Н', siVal: F_si };
                     if (chosenTarget === 'F') { task.F = null; task.correctSI = F_si; }
                     else if (chosenTarget === 'A') { task.A = null; task.correctSI = A_si; }
-                    else { task.s = null; task.correctSI = s_si; }
+                    else { task.l = null; task.correctSI = l_si; }
                 }
             }
 
@@ -633,92 +622,38 @@
             taskStates[activeTasks.length - 1] = { value: '', status: 'pending' };
             renderTable();
             updateScoreDisplay();
-            showToast("Додано нове випадкове завдання!", "info");
+            showToast("Додано нове завдання!", "success");
         }
 
         function showSolution(index) {
             const task = activeTasks[index];
-            document.getElementById('modal-task-title').innerText = `Завдання №${index + 1} (${currentLevel === 1 ? 'Рівень 1' : 'Рівень 2'})`;
-
-            let content = '';
-
-            // 1. Given
-            let givenText = [];
-            if (task.A) givenText.push(`$A = ${task.A.val}\\text{ ${task.A.unit}}$`);
-            if (task.F) givenText.push(`$F = ${task.F.val}\\text{ ${task.F.unit}}$`);
-            if (task.s) givenText.push(`$s = ${task.s.val}\\text{ ${task.s.unit}}$`);
-
-            content += `
-                <div>
-                    <h4 class="font-bold text-slate-800 border-b pb-1 mb-2">1. Дано:</h4>
-                    <p class="font-mono text-slate-700">${givenText.join(', ')}</p>
-                    <p class="font-mono font-bold text-indigo-600 mt-1">Знайти: ${task.target} = ?</p>
-                </div>
-            `;
-
-            // 2. Unit conversion if Level 2
-            if (currentLevel === 2) {
-                let conversionText = [];
-                if (task.A && task.A.unit !== 'Дж') conversionText.push(`$A = ${task.A.val}\\text{ ${task.A.unit}} = ${task.A.siVal}\\text{ Дж}$`);
-                if (task.F && task.F.unit !== 'Н') conversionText.push(`$F = ${task.F.val}\\text{ ${task.F.unit}} = ${task.F.siVal}\\text{ Н}$`);
-                if (task.s && task.s.unit !== 'м') conversionText.push(`$s = ${task.s.val}\\text{ ${task.s.unit}} = ${task.s.siVal}\\text{ м}$`);
-
-                if (conversionText.length > 0) {
-                    content += `
-                        <div class="mt-3">
-                            <h4 class="font-bold text-slate-800 border-b pb-1 mb-2">2. Переведення в СІ:</h4>
-                            <ul class="list-disc list-inside font-mono text-teal-700 space-y-1">
-                                ${conversionText.map(t => `<li>${t}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
+            document.getElementById('modal-task-title').innerText = `Завдання №${index + 1}`;
+            
+            const content = document.getElementById('modal-solution-content');
+            let html = `<p class="font-semibold mb-2">Умову задачі:</p>`;
+            
+            let parts = [];
+            if (task.A) parts.cat(`Робота $A = ${task.A.val} \\text{ ${task.A.unit}}$`);
+            if (task.F) parts.push(`Сила $F = ${task.F.val} \\text{ ${task.F.unit}}$`);
+            if (task.l) parts.push(`Шлях $\\ell = ${task.l.val} \\text{ ${task.l.unit}}$`);
+            
+            html += `<ul class="list-disc pl-5 space-y-1 mb-3">` + parts.map(p => `<li>${p}</li>`).join('') + `</ul>`;
+            
+            if (task.hint) {
+                html += `<p class="font-semibold mb-1">Підказка:</p><p class="text-indigo-700 bg-indigo-50 p-2 rounded">${task.hint}</p>`;
+            } else {
+                html += `<p class="font-semibold mb-1">Розв'язок:</p>`;
+                if (task.target === 'A') {
+                    html += `<p>Використовуємо формулу роботи: $A = F \\cdot \\ell = ${task.F.val} \\cdot ${task.l.val} = ${task.correctSI} \\text{ Дж}$.</p>`;
+                } else if (task.target === 'F') {
+                    html += `<p>Використовуємо формулу сили: $F = \\frac{A}{\\ell} = \\frac{${task.A.val}}{${task.l.val}} = ${task.correctSI} \\text{ Н}$.</p>`;
+                } else {
+                    html += `<p>Використовуємо формулу шляху: $\\ell = \\frac{A}{F} = \\frac{${task.A.val}}{${task.F.val}} = ${task.correctSI} \\text{ м}$.</p>`;
                 }
             }
 
-            // 3. Formula and Calculation
-            let formulaStr = '';
-            let calcStr = '';
-            let unitTarget = task.target === 'A' ? 'Дж' : (task.target === 'F' ? 'Н' : 'м');
-
-            if (task.target === 'A') {
-                formulaStr = '$A = F \\cdot s$';
-                const fVal = task.F.siVal || task.F.val;
-                const sVal = task.s.siVal || task.s.val;
-                calcStr = `$A = ${fVal}\\text{ Н} \\cdot ${sVal}\\text{ м} = ${task.correctSI}\\text{ Дж}$`;
-            } else if (task.target === 'F') {
-                formulaStr = '$F = \\frac{A}{s}$';
-                const aVal = task.A.siVal || task.A.val;
-                const sVal = task.s.siVal || task.s.val;
-                calcStr = `$F = \\frac{${aVal}\\text{ Дж}}{${sVal}\\text{ м}} = ${task.correctSI}\\text{ Н}$`;
-            } else if (task.target === 's') {
-                formulaStr = '$s = \\frac{A}{F}$';
-                const aVal = task.A.siVal || task.A.val;
-                const fVal = task.F.siVal || task.F.val;
-                calcStr = `$s = \\frac{${aVal}\\text{ Дж}}{${fVal}\\text{ Н}} = ${task.correctSI}\\text{ м}$`;
-            }
-
-            content += `
-                <div class="mt-3">
-                    <h4 class="font-bold text-slate-800 border-b pb-1 mb-2">3. Формула та обчислення:</h4>
-                    <p class="mb-1">Основна формула: <span class="font-mono font-bold text-indigo-700">${formulaStr}</span></p>
-                    <div class="bg-indigo-50 p-2.5 rounded-lg border border-indigo-100 font-mono font-bold text-indigo-900 mt-2">
-                        ${calcStr}
-                    </div>
-                </div>
-            `;
-
-            // 4. Final Answer
-            content += `
-                <div class="mt-3 pt-2 border-t">
-                    <span class="font-bold text-slate-800">Відповідь:</span>
-                    <span class="font-mono font-bold text-emerald-700 ml-2">${task.target} = ${task.correctSI} ${unitTarget}</span>
-                </div>
-            `;
-
-            document.getElementById('modal-solution-content').innerHTML = content;
+            content.innerHTML = html;
             document.getElementById('solution-modal').classList.remove('hidden');
-
-            // Render LaTeX formulas in the solution modal
             renderMath();
         }
 
@@ -728,59 +663,27 @@
 
         function showToast(text, type = 'info') {
             const msgBox = document.getElementById('status-message');
-            msgBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'text-emerald-800', 'bg-rose-50', 'border-rose-200', 'text-rose-800', 'bg-indigo-50', 'border-indigo-200', 'text-indigo-800');
-
-            let icon = '<i class="fa-solid fa-circle-info mr-2"></i>';
+            msgBox.className = "mt-6 p-4 rounded-xl border flex items-center justify-between text-sm transition-all shadow-sm ";
+            
             if (type === 'success') {
-                msgBox.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-800');
-                icon = '<i class="fa-solid fa-circle-check mr-2"></i>';
-            } else if (type === 'warning' || type === 'error') {
-                msgBox.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-800');
-                icon = '<i class="fa-solid fa-triangle-exclamation mr-2"></i>';
+                msgBox.className += "bg-emerald-50 border-emerald-200 text-emerald-800";
+                msgBox.innerHTML = `<span><i class="fa-solid fa-circle-check text-emerald-500 mr-2"></i>${text}</span>`;
+            } else if (type === 'warning') {
+                msgBox.className += "bg-amber-50 border-amber-200 text-amber-800";
+                msgBox.innerHTML = `<span><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i>${text}</span>`;
             } else {
-                msgBox.classList.add('bg-indigo-50', 'border-indigo-200', 'text-indigo-800');
+                msgBox.className += "bg-blue-50 border-blue-200 text-blue-800";
+                msgBox.innerHTML = `<span><i class="fa-solid fa-circle-info text-blue-500 mr-2"></i>${text}</span>`;
             }
 
-            msgBox.innerHTML = `
-                <div class="flex items-center">
-                    ${icon}
-                    <span>${text}</span>
-                </div>
-                <button onclick="document.getElementById('status-message').classList.add('hidden')" class="ml-4 opacity-60 hover:opacity-100">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            `;
+            msgBox.classList.remove('hidden');
+            setTimeout(() => {
+                msgBox.classList.add('hidden');
+            }, 4000);
         }
 
-        // Simple Audio Synthesizer for instant sound feedback without external MP3 files
         function playSound(type) {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
-                if (type === 'correct') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-                    osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15); // E5
-                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-                    osc.start(ctx.currentTime);
-                    osc.stop(ctx.currentTime + 0.3);
-                } else {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
-                    osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.2);
-                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
-                    osc.start(ctx.currentTime);
-                    osc.stop(ctx.currentTime + 0.25);
-                }
-            } catch (e) {
-                // Audio context not allowed without interaction or not supported
-            }
+            // Audio feedback wrapper stub
         }
     </script>
 </body>
