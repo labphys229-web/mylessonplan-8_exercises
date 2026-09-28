@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="uk" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>§ 4. Механічна робота — Інтерактивний урок з фізики</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        physics: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- MathJax 3 Configuration & Loading -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax ready');
+                    });
+                }
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Custom CSS for 3D Card Flip & Animations -->
+    <style>
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .transition-transform-700 {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 bg-slate-50 antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Application Header -->
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white shadow-xl sticky top-0 z-50 border-b border-indigo-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                
+                <!-- Title & Context Badge -->
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-blue-600/30 rounded-xl border border-blue-400/30 backdrop-blur-md flex items-center justify-center text-blue-300">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2 text-xs font-semibold tracking-wider text-blue-300 uppercase">
+                            <span>Фізика • 7 Клас</span>
+                            <span class="text-indigo-400">•</span>
+                            <span class="bg-indigo-500/30 text-indigo-200 px-2 py-0.5 rounded-full border border-indigo-400/30">Розділ 1</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                            § 4. Механічна робота
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Live Status & Indicator -->
+                <div class="flex items-center justify-between md:justify-end space-x-4">
+                    <div class="flex items-center space-x-2 bg-slate-800/80 px-3.5 py-1.5 rounded-full border border-slate-700 text-xs text-slate-300">
+                        <span class="relative flex h-2.5 w-2.5">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        <span class="font-medium text-emerald-300">Готовий до навчання</span>
+                    </div>
+
+                    <div class="hidden sm:flex text-xs text-slate-400 border-l border-slate-700 pl-4 space-x-1">
+                        <span>Формули:</span>
+                        <span class="text-yellow-300 font-semibold">$A = Fl$</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-slate-900/90 backdrop-blur border-t border-slate-800 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto flex space-x-1 sm:space-x-4 overflow-x-auto py-2 no-scrollbar" id="tab-buttons">
+                <button onclick="switchTab('flashcards')" id="tab-btn-flashcards" class="tab-btn active px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 whitespace-nowrap bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+                    <span>🎴</span>
+                    <span>Контрольні запитання</span>
+                    <span class="bg-blue-800/60 text-blue-200 text-xs px-2 py-0.5 rounded-full ml-1">5</span>
+                </button>
+                <button onclick="switchTab('quiz')" id="tab-btn-quiz" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 whitespace-nowrap text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <span>📝</span>
+                    <span>Інтерактивний тест</span>
+                    <span class="bg-slate-800 text-slate-400 text-xs px-2 py-0.5 rounded-full ml-1">7 завдань</span>
+                </button>
+                <button onclick="switchTab('simulator')" id="tab-btn-simulator" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 whitespace-nowrap text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <span>📏</span>
+                    <span>Тренажер & Графік</span>
+                </button>
+                <button onclick="switchTab('cases')" id="tab-btn-cases" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 whitespace-nowrap text-slate-300 hover:bg-slate-800 hover:text-white">
+                    <span>✈️</span>
+                    <span>Ситуаційні кейси</span>
+                    <span class="bg-indigo-900/80 text-indigo-300 text-xs px-2 py-0.5 rounded-full ml-1">4 розбори</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ==================== TAB 1: FLASHCARDS ==================== -->
+        <section id="tab-flashcards" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <span>🎴</span> Контрольні запитання (Flashcards)
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Перевірте розуміння базових понять § 4. Натисніть на картку, щоб дізнатися точну відповідь з матеріалу підручника.
+                    </p>
+                </div>
+                <div class="flex items-center space-x-2 text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg self-start md:self-auto">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/>
+                    </svg>
+                    <span>Натискайте для перегортання (3D-Flip)</span>
+                </div>
+            </div>
+
+            <!-- Flashcards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Card 1 -->
+                <div class="perspective-1000 h-80 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full transform-style-3d transition-transform-700 rounded-2xl shadow-md border border-slate-200">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-white to-slate-50 p-6 rounded-2xl backface-hidden flex flex-col justify-between border-2 border-slate-100 group-hover:border-blue-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Запитання 1</span>
+                                    <span class="text-slate-400 text-xs">§ 4.1</span>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800 leading-snug">
+                                    Дайте означення механічної роботи. За якою формулою її обчислюють?
+                                </h3>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                <span class="font-medium text-blue-600">Натисніть для відповіді</span>
+                                <svg class="w-5 h-5 text-blue-500 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </div>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full bg-slate-900 text-white p-6 rounded-2xl backface-hidden rotate-y-180 flex flex-col justify-between overflow-y-auto border-2 border-blue-600">
+                            <div>
+                                <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Відповідь</span>
+                                <p class="text-sm mt-2 text-slate-200 leading-relaxed">
+                                    <strong>Механічна робота</strong> — це фізична величина, яка характеризує зміну положення тіла під дією сили й дорівнює добутку сили на шлях, подоланий тілом у напрямку цієї сили.
+                                </p>
+                                <div class="mt-3 bg-slate-800/80 p-2.5 rounded-lg text-center border border-slate-700">
+                                    <span class="text-yellow-300 font-bold">$A = Fl$</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800 flex items-center justify-between">
+                                <span>де $F$ — сила, $l$ — шлях.</span>
+                                <span>🔄 Клацніть, щоб повернути</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="perspective-1000 h-80 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full transform-style-3d transition-transform-700 rounded-2xl shadow-md border border-slate-200">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-white to-slate-50 p-6 rounded-2xl backface-hidden flex flex-col justify-between border-2 border-slate-100 group-hover:border-blue-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md">Запитання 2</span>
+                                    <span class="text-slate-400 text-xs">§ 4.1</span>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800 leading-snug">
+                                    Назвіть одиницю механічної роботи в СІ та дайте її означення.
+                                </h3>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                <span class="font-medium text-emerald-600">Натисніть для відповіді</span>
+                                <svg class="w-5 h-5 text-emerald-500 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </div>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full bg-slate-900 text-white p-6 rounded-2xl backface-hidden rotate-y-180 flex flex-col justify-between overflow-y-auto border-2 border-emerald-500">
+                            <div>
+                                <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Відповідь</span>
+                                <p class="text-sm mt-2 text-slate-200 leading-relaxed">
+                                    Одиницею роботи в СІ є <strong>джоуль (Дж)</strong>.
+                                </p>
+                                <p class="text-xs text-slate-300 mt-2">
+                                    $1\text{ Дж}$ дорівнює механічній роботі, яку виконує сила $1\text{ Н}$, переміщуючи тіло на $1\text{ м}$ у напрямку дії цієї сили:
+                                </p>
+                                <div class="mt-3 bg-slate-800/80 p-2.5 rounded-lg text-center border border-slate-700 text-emerald-300 font-bold">
+                                    $1\text{ Дж} = 1\text{ Н} \cdot \text{м}$
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800 flex items-center justify-between">
+                                <span>СІ: $\text{Дж} = \text{Н}\cdot\text{м}$</span>
+                                <span>🔄 Клацніть, щоб повернути</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="perspective-1000 h-80 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full transform-style-3d transition-transform-700 rounded-2xl shadow-md border border-slate-200">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-white to-slate-50 p-6 rounded-2xl backface-hidden flex flex-col justify-between border-2 border-slate-100 group-hover:border-blue-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-2.5 py-1 rounded-md">Запитання 3</span>
+                                    <span class="text-slate-400 text-xs">Історія</span>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800 leading-snug">
+                                    На честь якого вченого названо одиницю роботи?
+                                </h3>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                <span class="font-medium text-purple-600">Натисніть для відповіді</span>
+                                <svg class="w-5 h-5 text-purple-500 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </div>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full bg-slate-900 text-white p-6 rounded-2xl backface-hidden rotate-y-180 flex flex-col justify-between overflow-y-auto border-2 border-purple-500">
+                            <div>
+                                <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Відповідь</span>
+                                <p class="text-sm mt-2 text-slate-200 leading-relaxed">
+                                    Одиниця названа на честь англійського фізика <strong>Джеймса Прескотта Джоуля</strong> (1818–1889), який досліджував збереження енергії та виділення тепла.
+                                </p>
+                            </div>
+                            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800 flex items-center justify-between">
+                                <span>James Prescott Joule</span>
+                                <span>🔄 Клацніть, щоб повернути</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="perspective-1000 h-80 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full transform-style-3d transition-transform-700 rounded-2xl shadow-md border border-slate-200">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-white to-slate-50 p-6 rounded-2xl backface-hidden flex flex-col justify-between border-2 border-slate-100 group-hover:border-blue-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md">Запитання 4</span>
+                                    <span class="text-slate-400 text-xs">§ 4.2</span>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800 leading-snug">
+                                    У яких випадках механічна робота є додатною ($A>0$), від'ємною ($A<0$) або дорівнює нулю ($A=0$)?
+                                </h3>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                <span class="font-medium text-amber-600">Натисніть для відповіді</span>
+                                <svg class="w-5 h-5 text-amber-500 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </div>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full bg-slate-900 text-white p-5 rounded-2xl backface-hidden rotate-y-180 flex flex-col justify-between overflow-y-auto border-2 border-amber-500">
+                            <div class="space-y-2">
+                                <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Знаки роботи</span>
+                                <ul class="text-xs text-slate-200 space-y-1.5">
+                                    <li class="bg-slate-800 p-2 rounded border border-emerald-500/30">
+                                        <strong class="text-emerald-400">$A > 0$:</strong> Напрямок сили збігається з напрямком руху ($A = Fl$).
+                                    </li>
+                                    <li class="bg-slate-800 p-2 rounded border border-rose-500/30">
+                                        <strong class="text-rose-400">$A < 0$:</strong> Напрямок сили протилежний руху ($A = -Fl$, напр. сила тертя).
+                                    </li>
+                                    <li class="bg-slate-800 p-2 rounded border border-amber-500/30">
+                                        <strong class="text-amber-300">$A = 0$:</strong> Сила перпендикулярна до напрямку руху або переміщення відсутнє ($l=0$).
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800 flex items-center justify-between">
+                                <span>Залежить від напрямку $\vec{F}$ і $\vec{v}$</span>
+                                <span>🔄 Повернути</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="perspective-1000 h-80 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full transform-style-3d transition-transform-700 rounded-2xl shadow-md border border-slate-200">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-white to-slate-50 p-6 rounded-2xl backface-hidden flex flex-col justify-between border-2 border-slate-100 group-hover:border-blue-300 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">Запитання 5</span>
+                                    <span class="text-slate-400 text-xs">§ 4.3</span>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800 leading-snug">
+                                    У чому полягає геометричний зміст механічної роботи?
+                                </h3>
+                            </div>
+                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                                <span class="font-medium text-rose-600">Натисніть для відповіді</span>
+                                <svg class="w-5 h-5 text-rose-500 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </div>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full bg-slate-900 text-white p-6 rounded-2xl backface-hidden rotate-y-180 flex flex-col justify-between overflow-y-auto border-2 border-rose-500">
+                            <div>
+                                <span class="text-xs font-semibold text-rose-400 uppercase tracking-wider">Геометричний зміст</span>
+                                <p class="text-sm mt-2 text-slate-200 leading-relaxed">
+                                    Якщо напрямок сили збігається з напрямком руху тіла, то робота цієї сили <strong>чисельно дорівнює площі фігури</strong> під графіком залежності сили $F$ від шляху $l$, який подолало тіло ($A = S$).
+                                </p>
+                            </div>
+                            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800 flex items-center justify-between">
+                                <span>Для постійної або змінної сили</span>
+                                <span>🔄 Клацніть, щоб повернути</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="perspective-1000 h-80 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full transform-style-3d transition-transform-700 rounded-2xl shadow-md border border-slate-200">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-2xl backface-hidden flex flex-col justify-between border-2 border-indigo-200 group-hover:border-indigo-400 transition-colors">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2.5 py-1 rounded-md">Формульний підсумок</span>
+                                    <span class="text-indigo-400 text-xs">Шпаргалка</span>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800 leading-snug">
+                                    Які формули та співвідношення потрібні для розв'язування задач?
+                                </h3>
+                            </div>
+                            <div class="pt-4 border-t border-indigo-100 flex items-center justify-between text-xs text-indigo-600">
+                                <span class="font-medium">Відкрити шпаргалку</span>
+                                <svg class="w-5 h-5 text-indigo-500 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </div>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full bg-slate-900 text-white p-5 rounded-2xl backface-hidden rotate-y-180 flex flex-col justify-between overflow-y-auto border-2 border-indigo-500">
+                            <div class="space-y-1.5 text-xs text-slate-200">
+                                <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">Корисні зв'язки:</span>
+                                <p class="bg-slate-800 p-2 rounded">$l = v \cdot t$ (при рівномірному русі)</p>
+                                <p class="bg-slate-800 p-2 rounded">$F_{\text{пруж}} = k|x|$ (закон Гука)</p>
+                                <p class="bg-slate-800 p-2 rounded">$F = mg$ (сила тяжіння)</p>
+                            </div>
+                            <p class="text-xs text-slate-400 pt-2 border-t border-slate-800 flex items-center justify-between">
+                                <span>Завжди переводьте в СІ!</span>
+                                <span>🔄 Повернути</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: QUIZ ==================== -->
+        <section id="tab-quiz" class="tab-content hidden space-y-6">
+            
+            <!-- Quiz Header / Score Board -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <span>📝</span> Перевірка знань: Інтерактивний тест
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Оберіть правильну відповідь. Після вибору відкриється обґрунтування з фізичною аргументацією.
+                    </p>
+                </div>
+
+                <div class="flex items-center space-x-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                    <div class="text-center">
+                        <span class="block text-xs uppercase font-semibold text-slate-400">Прогрес</span>
+                        <span id="quiz-progress-text" class="text-lg font-bold text-slate-800">0 / 7</span>
+                    </div>
+                    <div class="h-8 w-px bg-slate-200"></div>
+                    <div class="text-center">
+                        <span class="block text-xs uppercase font-semibold text-slate-400">Результат</span>
+                        <span id="quiz-score-percent" class="text-lg font-bold text-blue-600">0%</span>
+                    </div>
+                    <button onclick="resetQuiz()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        Скинути
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Questions Container -->
+            <div id="quiz-container" class="space-y-6">
+                <!-- Dynamically rendered via JavaScript -->
+            </div>
+
+        </section>
+
+        <!-- ==================== TAB 3: SIMULATOR & CALCULATOR ==================== -->
+        <section id="tab-simulator" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span>📏</span> Інтерактивний тренажер & Геометрична візуалізація
+                </h2>
+                <p class="text-slate-600 text-sm mt-1">
+                    Досліджуйте залежність роботи від сили та шляху на графіку $F(l)$, а також розв'язуйте розрахункову задачу про брусок і пружину з підручника.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Left Column: Interactive Graph Visualizer -->
+                <div class="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 space-y-6">
+                    <div class="flex items-center justify-between border-b pb-3">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+                            Візуалізатор геометричного змісту роботи
+                        </h3>
+                        <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Графік $F(l)$</span>
+                    </div>
+
+                    <!-- SVG Canvas for Graph -->
+                    <div class="bg-slate-900 rounded-xl p-4 shadow-inner relative flex justify-center items-center overflow-hidden">
+                        <svg id="sim-svg" class="w-full h-64" viewBox="0 0 400 240">
+                            <!-- SVG elements drawn by JS -->
+                        </svg>
+                    </div>
+
+                    <!-- Interactive Controls for Graph -->
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Slider 1: Force F -->
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                                    <label for="sim-force-input">Сила ($F$):</label>
+                                    <span id="sim-force-val" class="text-blue-600 font-bold">$20\text{ Н}$</span>
+                                </div>
+                                <input type="range" id="sim-force-input" min="5" max="50" value="20" step="1" oninput="updateSimulator()" class="w-full accent-blue-600 cursor-pointer">
+                            </div>
+
+                            <!-- Slider 2: Path l -->
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                                    <label for="sim-path-input">Шлях ($l$):</label>
+                                    <span id="sim-path-val" class="text-emerald-600 font-bold">$10\text{ м}$</span>
+                                </div>
+                                <input type="range" id="sim-path-input" min="2" max="20" value="10" step="1" oninput="updateSimulator()" class="w-full accent-emerald-600 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Force Mode Toggle -->
+                        <div class="flex items-center space-x-4 pt-2 border-t border-slate-200 text-xs">
+                            <span class="font-semibold text-slate-700">Характер сили:</span>
+                            <label class="flex items-center space-x-1.5 cursor-pointer">
+                                <input type="radio" name="sim-mode" value="constant" checked onchange="updateSimulator()" class="text-blue-600">
+                                <span>Постійна сила ($F = \text{const}$)</span>
+                            </label>
+                            <label class="flex items-center space-x-1.5 cursor-pointer">
+                                <input type="radio" name="sim-mode" value="linear" onchange="updateSimulator()" class="text-blue-600">
+                                <span>Змінна сила ($F \sim l$, пружина)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Result Box -->
+                    <div class="p-4 bg-blue-50/80 rounded-xl border border-blue-200 text-sm space-y-1">
+                        <div class="text-xs font-semibold uppercase text-blue-700">Обчислена площа (Робота):</div>
+                        <div id="sim-result-formula" class="text-slate-800 font-medium">
+                            $A = F \cdot l = 20\text{ Н} \cdot 10\text{ м} = 200\text{ Дж}$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Textbook Problem Solver Simulator -->
+                <div class="lg:col-span-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 space-y-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b pb-3 mb-4">
+                            <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-indigo-600"></span>
+                                Задача з підручника (§ 4, ст. 28)
+                            </h3>
+                            <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Пружина</span>
+                        </div>
+
+                        <p class="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200 leading-relaxed mb-4">
+                            <strong>Умова:</strong> За допомогою пружини жорсткістю $k = 25\text{ Н/м}$ брусок пересувають по столу зі швидкістю $v = 5\text{ см/с}$. Яку роботу виконає сила пружності за час $t = 20\text{ с}$, якщо видовження пружини становить $x = 4\text{ см}$?
+                        </p>
+
+                        <!-- Student Input Practice Form -->
+                        <div class="space-y-3">
+                            <label for="student-task-input" class="block text-xs font-semibold text-slate-700">Введіть обчислене значення роботи $A$ (у Джоулях):</label>
+                            <div class="flex space-x-2">
+                                <input type="number" id="student-task-input" placeholder="Наприклад: 1" class="flex-1 px-3.5 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button onclick="checkTaskAnswer()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-md shadow-indigo-600/20">
+                                    Перевірити
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Feedback area -->
+                        <div id="task-feedback" class="mt-4 hidden p-4 rounded-xl text-xs space-y-2"></div>
+                    </div>
+
+                    <!-- Formula breakdown accordion preview -->
+                    <div class="bg-slate-900 text-white p-4 rounded-xl border border-slate-800 text-xs space-y-2">
+                        <span class="text-indigo-400 font-bold block uppercase tracking-wider">Формульний алгоритм:</span>
+                        <ol class="list-decimal list-inside space-y-1 text-slate-300">
+                            <li>Сила пружності: $F_{\text{пруж}} = k \cdot |x|$</li>
+                            <li>Пройдений шлях: $l = v \cdot t$</li>
+                            <li>Робота: $A = F_{\text{пруж}} \cdot l = k |x| v t$</li>
+                        </ol>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ==================== TAB 4: CASE STUDIES ==================== -->
+        <section id="tab-cases" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span>✈️</span> Ситуаційні кейси та приклади з життя
+                </h2>
+                <p class="text-slate-600 text-sm mt-1">
+                    Аналіз фізичних явищ з параграфа: рубрика «А як насправді?», рух баржі під дією кількох сил та розумова робота.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Case 1 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-md">Кейс 1 • А як насправді?</span>
+                            <span class="text-xs text-slate-400">§ 4.1 (ст. 27)</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">
+                            Дискусія Аліни та Тетяни: хто виконав роботу під час пересування меблів?
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Аліна втомилася, переставляючи меблі. Подруга Тетяна пожартувала, що сила тертя виконала <em>таку саму роботу</em>. Аліна обурилася: «Якби сила тертя виконала таку ж роботу, меблі залишилися б на місці!».
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-2">
+                        <div class="font-bold text-slate-800">Фізичний аналіз:</div>
+                        <p class="text-slate-600">
+                            Обидві дівчини частково праві з різної точки зору! За модулем роботи дійсно однакові ($|A_{\text{м}}| = |A_{\text{тертя}}|$), але за знаком роботи <strong>протилежні</strong>:
+                        </p>
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <span class="bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded">$A_{\text{людини}} = +Fl > 0$</span>
+                            <span class="bg-rose-100 text-rose-800 font-semibold px-2 py-0.5 rounded">$A_{\text{тертя}} = -Fl < 0$</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-blue-100 text-blue-800 font-bold text-xs px-2.5 py-1 rounded-md">Кейс 2 • Рух баржі</span>
+                            <span class="text-xs text-slate-400">§ 4.1 (Рис. 4.1)</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">
+                            Які сили виконують роботу при буксируванні баржі?
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Буксир тягне баржу за канат силою $\vec{F}_{\text{тяги}}$. На баржу також діє вага вантажу $\vec{P}$, сила реакції води $\vec{N}$ та сила опору води $\vec{F}_{\text{опору}}$.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-2">
+                        <div class="font-bold text-slate-800">Розподіл робіт за силами:</div>
+                        <ul class="space-y-1 text-slate-600">
+                            <li>• <strong class="text-blue-700">Сила тяги ($\vec{F}_{\text{тяги}}$):</strong> напрямлена за рухом $\rightarrow A > 0$.</li>
+                            <li>• <strong class="text-rose-700">Сила опору ($\vec{F}_{\text{опору}}$):</strong> проти руху $\rightarrow A < 0$.</li>
+                            <li>• <strong class="text-amber-700">Вага ($\vec{P}$) і нормальна реакція ($\vec{N}$):</strong> перпендикулярні до руху $\rightarrow A = 0$.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-purple-100 text-purple-800 font-bold text-xs px-2.5 py-1 rounded-md">Кейс 3 • Навчання за партою</span>
+                            <span class="text-xs text-slate-400">Вступ параграфа</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">
+                            Чи виконуєте ви механічну роботу, коли слухаєте вчителя чи розв'язуєте задачу усно?
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            У побуті ми кажемо «я втомився від розумової роботи». Проте у фізиці термін «механічна робота» має суворе математичне визначення.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-2">
+                        <div class="font-bold text-slate-800">Висновок фізики:</div>
+                        <p class="text-slate-600">
+                            Оскільки під час сидіння за партою тіло як ціле не змінює свого положення в просторі ($l = 0$), <strong>механічна робота дорівнює нулю ($A = 0$)</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Case 4 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2.5 py-1 rounded-md">Кейс 4 • Важкоатлет і штанга</span>
+                            <span class="text-xs text-slate-400">§ 4.1 (Приклад 27)</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">
+                            Підняття штанги vs утримання над головою
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Хлопчик підняв штангу масою на висоту $h = 1{.}5\text{ м}$, приклавши силу $F = 200\text{ Н}$. Після цього він утримує її нерухомо протягом 5 секунд.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-2">
+                        <div class="font-bold text-slate-800">Фізична різниця:</div>
+                        <p class="text-slate-600">
+                            Під час підняття: $A = F \cdot h = 200\text{ Н} \cdot 1{.}5\text{ м} = 300\text{ Дж} > 0$.<br>
+                            Під час непорушного утримання: $l = 0 \rightarrow A = 0\text{ Дж}$.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>Навчальний інтерактивний модуль з фізики • 7 клас</span>
+            <span>Параграф 4: Механічна робота</span>
+        </div>
+    </footer>
+
+    <!-- Application Logic (JavaScript) -->
+    <script>
+        
+        // Quiz Data based on textbook § 4
+        const quizQuestions = [
+            {
+                id: 1,
+                question: "Що таке механічна робота?",
+                options: [
+                    "Будь-яке зусилля або розумова праця людини",
+                    "Фізична величина, яка дорівнює добутку сили на шлях, подоланий тілом у напрямку цієї сили",
+                    "Фізична величина, що характеризує швидкість зміни швидкості",
+                    "Добуток маси тіла на його прискорення"
+                ],
+                correct: 1,
+                explanation: "Згідно з § 4 підручника, механічна робота $A$ — це фізична величина, яка характеризує зміну положення тіла під дією сили й дорівнює добутку сили $F$ на шлях $l$: $A = Fl$."
+            },
+            {
+                id: 2,
+                question: "Якою є одиниця механічної роботи в Міжнародній системі одиниць (СІ)?",
+                options: [
+                    "Ньютон (Н)",
+                    "Ват (Вт)",
+                    "Джоуль (Дж)",
+                    "Паскаль (Па)"
+                ],
+                correct: 2,
+                explanation: "Одиницею роботи в СІ є Джоуль ($\text{Дж}$). $1\text{ Дж} = 1\text{ Н} \cdot 1\text{ м}$ — це робота сили $1\text{ Н}$ при переміщенні на $1\text{ м}$."
+            },
+            {
+                id: 3,
+                question: "У якому випадку сила виконує ВІД'ЄМНУ роботу ($A < 0$)?",
+                options: [
+                    "Якщо напрямок сили збігається з напрямком руху тіла",
+                    "Якщо напрямок сили перпендикулярний до напрямку руху тіла",
+                    "Якщо напрямок сили протилежний напрямку руху тіла",
+                    "Якщо тіло перебуває у стані спокою"
+                ],
+                correct: 2,
+                explanation: "Якщо сила напрямлена проти руху тіла (наприклад, сила тертя чи сила опору), то робота такої сили є від'ємною: $A = -Fl$."
+            },
+            {
+                id: 4,
+                question: "Чому дорівнює робота сили, якщо вона напрямлена перпендикулярно до руху тіла?",
+                options: [
+                    "$A > 0$",
+                    "$A < 0$",
+                    "$A = 0$",
+                    "$A = F \cdot l$"
+                ],
+                correct: 2,
+                explanation: "Якщо напрямок сили перпендикулярний до напрямку руху тіла, ця сила не сприяє і не заважає руху у цьому напрямку, тому робота дорівнює нулю ($A = 0$). Приклад: вага вантажу на рухомій баржі."
+            },
+            {
+                id: 5,
+                question: "У чому полягає геометричний зміст механічної роботи?",
+                options: [
+                    "Робота дорівнює периметру траєкторії руху",
+                    "Робота чисельно дорівнює площі фігури під графіком залежності сили $F$ від шляху $l$",
+                    "Робота дорівнює куту нахилу графіку швидкості",
+                    "Робота дорівнює довжині вектора сили"
+                ],
+                correct: 1,
+                explanation: "На графіку залежності $F(l)$ площа $S$ фігури під графіком чисельно дорівнює виконаній роботі $A = S$."
+            },
+            {
+                id: 6,
+                question: "Обчисліть роботу, яку виконує сила $F = 50\\text{ Н}$, переміщуючи візок на шлях $l = 4\\text{ м}$ у напрямку дії сили.",
+                options: [
+                    "$12.5\\text{ Дж}$",
+                    "$200\\text{ Дж}$",
+                    "$54\\text{ Дж}$",
+                    "$0\\text{ Дж}$"
+                ],
+                correct: 1,
+                explanation: "Використовуємо формулу $A = Fl = 50\\text{ Н} \\cdot 4\\text{ м} = 200\\text{ Дж}$."
+            },
+            {
+                id: 7,
+                question: "Хлопчик тримає у руках важку валізу масою $15\\text{ кг}$, стоячи нерухомо на зупинці. Яку механічну роботу виконує сила рук?",
+                options: [
+                    "$150\\text{ Дж}$",
+                    "$15\\text{ Дж}$",
+                    "$0\\text{ Дж}$",
+                    "$1.5\\text{ Дж}$"
+                ],
+                correct: 2,
+                explanation: "Оскільки валіза не рухається ($l = 0\\text{ м}$), переміщення відсутнє, тому механічна робота сили дорівнює нулю ($A = 0$)."
+            }
+        ];
+
+        // App state
+        let userAnswers = {};
+
+        
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Remove active styles from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-lg', 'shadow-blue-600/30');
+                btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+            });
+
+            // Show selected tab content
+            const selectedTab = document.getElementById(`tab-${tabId}`);
+            if (selectedTab) {
+                selectedTab.classList.remove('hidden');
+            }
+
+            // Highlight selected button
+            const selectedBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (selectedBtn) {
+                selectedBtn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white');
+                selectedBtn.classList.add('bg-blue-600', 'text-white', 'shadow-lg', 'shadow-blue-600/30');
+            }
+
+            // Render MathJax LaTeX formulas dynamically
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+
+            // Specific refresh for simulator tab
+            if (tabId === 'simulator') {
+                updateSimulator();
+            }
+        }
+
+        
+        function flipCard(cardElement) {
+            const inner = cardElement.querySelector('.card-inner');
+            if (inner) {
+                inner.classList.toggle('rotate-y-180');
+            }
+            // Trigger MathJax re-render for flipped card
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            quizQuestions.forEach((q, qIndex) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 space-y-4';
+                
+                const selected = userAnswers[q.id];
+                const isAnswered = selected !== undefined;
+
+                let optionsHTML = '';
+                q.options.forEach((opt, optIndex) => {
+                    let btnStyle = "border-slate-200 hover:border-blue-300 hover:bg-slate-50 text-slate-700";
+                    let badgeHTML = "";
+
+                    if (isAnswered) {
+                        if (optIndex === q.correct) {
+                            btnStyle = "border-emerald-500 bg-emerald-50 text-emerald-900 font-medium";
+                            badgeHTML = `<span class="ml-auto text-emerald-600 font-bold">✓ Правильно</span>`;
+                        } else if (optIndex === selected) {
+                            btnStyle = "border-rose-500 bg-rose-50 text-rose-900 font-medium";
+                            badgeHTML = `<span class="ml-auto text-rose-600 font-bold">✗ Ваша відповідь</span>`;
+                        } else {
+                            btnStyle = "border-slate-200 opacity-60 text-slate-500";
+                        }
+                    }
+
+                    optionsHTML += `
+                        <button 
+                            onclick="selectQuizAnswer(${q.id}, ${optIndex})"
+                            ${isAnswered ? 'disabled' : ''}
+                            class="w-full text-left p-3.5 rounded-xl border text-sm transition-all duration-200 flex items-center justify-between ${btnStyle}">
+                            <div class="flex items-center space-x-3">
+                                <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600 shrink-0 border">
+                                    ${String.fromCharCode(65 + optIndex)}
+                                </span>
+                                <span>${opt}</span>
+                            </div>
+                            ${badgeHTML}
+                        </button>
+                    `;
+                });
+
+                let explanationHTML = '';
+                if (isAnswered) {
+                    explanationHTML = `
+                        <div class="mt-4 p-4 rounded-xl text-xs space-y-1 ${selected === q.correct ? 'bg-emerald-50 border border-emerald-200 text-emerald-950' : 'bg-rose-50 border border-rose-200 text-rose-950'}">
+                            <div class="font-bold flex items-center gap-1.5 text-sm">
+                                <span>💡Фізична аргументація:</span>
+                            </div>
+                            <p class="pt-1 leading-relaxed">${q.explanation}</p>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
+                            Завдання ${qIndex + 1} з ${quizQuestions.length}
+                        </span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800 leading-snug">
+                        ${q.question}
+                    </h3>
+                    <div class="space-y-2.5 pt-2">
+                        ${optionsHTML}
+                    </div>
+                    ${explanationHTML}
+                `;
+
+                container.appendChild(card);
+            });
+
+            updateQuizHeader();
+
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        function selectQuizAnswer(qId, optionIndex) {
+            userAnswers[qId] = optionIndex;
+            renderQuiz();
+        }
+
+        function updateQuizHeader() {
+            const answeredCount = Object.keys(userAnswers).length;
+            let correctCount = 0;
+
+            quizQuestions.forEach(q => {
+                if (userAnswers[q.id] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const percent = answeredCount > 0 ? Math.round((correctCount / quizQuestions.length) * 100) : 0;
+
+            document.getElementById('quiz-progress-text').innerText = `${answeredCount} / ${quizQuestions.length}`;
+            document.getElementById('quiz-score-percent').innerText = `${percent}%`;
+        }
+
+        function resetQuiz() {
+            userAnswers = {};
+            renderQuiz();
+        }
+
+        
+        function updateSimulator() {
+            const forceInput = document.getElementById('sim-force-input');
+            const pathInput = document.getElementById('sim-path-input');
+            if (!forceInput || !pathInput) return;
+
+            const force = parseFloat(forceInput.value);
+            const path = parseFloat(pathInput.value);
+            const mode = document.querySelector('input[name="sim-mode"]:checked').value;
+
+            document.getElementById('sim-force-val').innerHTML = `$${force}\\text{ Н}$`;
+            document.getElementById('sim-path-val').innerHTML = `$${path}\\text{ м}$`;
+
+            let work = 0;
+            if (mode === 'constant') {
+                work = force * path;
+            } else {
+                work = 0.5 * force * path;
+            }
+
+            // Update formula display
+            const formulaElem = document.getElementById('sim-result-formula');
+            if (mode === 'constant') {
+                formulaElem.innerHTML = `$A = S = F \\cdot l = ${force}\\text{ Н} \\cdot ${path}\\text{ м} = ${work.toFixed(1)}\\text{ Дж}$`;
+            } else {
+                formulaElem.innerHTML = `$A = S = \\frac{1}{2} F \\cdot l = \\frac{1}{2} \\cdot ${force}\\text{ Н} \\cdot ${path}\\text{ м} = ${work.toFixed(1)}\\text{ Дж}$`;
+            }
+
+            // Render SVG Chart
+            renderSVGChart(force, path, mode);
+
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        function renderSVGChart(F, l, mode) {
+            const svg = document.getElementById('sim-svg');
+            if (!svg) return;
+
+            // Chart Bounds: max F=50, max l=20
+            const maxF = 60;
+            const maxL = 22;
+
+            const width = 400;
+            const height = 240;
+            const padding = 45;
+
+            // Mapping functions
+            const mapX = (val) => padding + (val / maxL) * (width - 2 * padding);
+            const mapY = (val) => (height - padding) - (val / maxF) * (height - 2 * padding);
+
+            const originX = mapX(0);
+            const originY = mapY(0);
+            const ptX = mapX(l);
+            const ptY = mapY(F);
+
+            let areaPathD = '';
+            let lineD = '';
+
+            if (mode === 'constant') {
+                areaPathD = `M ${originX} ${originY} L ${originX} ${ptY} L ${ptX} ${ptY} L ${ptX} ${originY} Z`;
+                lineD = `M ${originX} ${ptY} L ${ptX} ${ptY}`;
+            } else {
+                areaPathD = `M ${originX} ${originY} L ${ptX} ${ptY} L ${ptX} ${originY} Z`;
+                lineD = `M ${originX} ${originY} L ${ptX} ${ptY}`;
+            }
+
+            svg.innerHTML = `
+                <!-- Background Grid -->
+                <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" stroke="#475569" stroke-width="2"/>
+                <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" stroke="#475569" stroke-width="2"/>
+
+                <!-- Shaded Area Under Graph -->
+                <path d="${areaPathD}" fill="rgba(59, 130, 246, 0.35)" stroke="#3b82f6" stroke-width="1.5"/>
+
+                <!-- Main Function Line -->
+                <path d="${lineD}" stroke="#60a5fa" stroke-width="3.5" stroke-linecap="round"/>
+
+                <!-- Dashed Projection Lines -->
+                <line x1="${ptX}" y1="${ptY}" x2="${ptX}" y2="${originY}" stroke="#94a3b8" stroke-dasharray="4,4"/>
+                <line x1="${originX}" y1="${ptY}" x2="${ptX}" y2="${ptY}" stroke="#94a3b8" stroke-dasharray="4,4"/>
+
+                <!-- Point Marker -->
+                <circle cx="${ptX}" cy="${ptY}" r="5" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+
+                <!-- Labels -->
+                <text x="${width - padding + 10}" y="${height - padding + 4}" fill="#94a3b8" font-size="12" font-weight="bold">l (м)</text>
+                <text x="${padding - 10}" y="${padding - 10}" fill="#94a3b8" font-size="12" font-weight="bold">F (Н)</text>
+                
+                <!-- Axis Values -->
+                <text x="${ptX}" y="${originY + 18}" fill="#38bdf8" font-size="11" text-anchor="middle" font-weight="bold">${l} м</text>
+                <text x="${originX - 12}" y="${ptY + 4}" fill="#38bdf8" font-size="11" text-anchor="end" font-weight="bold">${F} Н</text>
+
+                <!-- Area label in SVG -->
+                <text x="${(originX + ptX) / 2}" y="${originY - 15}" fill="#ffffff" font-size="12" text-anchor="middle" font-weight="bold">Площа S = A</text>
+            `;
+        }
+
+        
+        function checkTaskAnswer() {
+            const input = document.getElementById('student-task-input');
+            const feedback = document.getElementById('task-feedback');
+            if (!input || !feedback) return;
+
+            const val = parseFloat(input.value.trim());
+
+            feedback.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-900', 'border-emerald-300', 'bg-rose-50', 'text-rose-900', 'border-rose-300');
+
+            if (isNaN(val)) {
+                feedback.classList.add('bg-rose-50', 'text-rose-900', 'border', 'border-rose-300');
+                feedback.innerHTML = `<strong>⚠️ Помилка:</strong> Будь ласка, введіть числове значення відносного розв'язку.`;
+                return;
+            }
+
+            // Expected value = 1 Joule
+            if (Math.abs(val - 1.0) < 0.05) {
+                feedback.classList.add('bg-emerald-50', 'text-emerald-950', 'border', 'border-emerald-300');
+                feedback.innerHTML = `
+                    <div class="font-bold text-sm text-emerald-700 flex items-center gap-1">
+                        <span>🎉 Абсолютно вірно! $A = 1\\text{ Дж}$</span>
+                    </div>
+                    <p class="mt-1"><strong>Детальний розв'язок за підручником:</strong></p>
+                    <p>1) $F_{\\text{пруж}} = k \\cdot |x| = 25\\text{ Н/м} \\cdot 0{.}04\\text{ м} = 1\\text{ Н}$</p>
+                    <p>2) $l = v \\cdot t = 0{.}05\\text{ м/с} \\cdot 20\\text{ с} = 1\\text{ м}$</p>
+                    <p>3) $A = F_{\\text{пруж}} \\cdot l = 1\\text{ Н} \\cdot 1\\text{ м} = 1\\text{ Дж}$</p>
+                `;
+            } else {
+                feedback.classList.add('bg-rose-50', 'text-rose-950', 'border', 'border-rose-300');
+                feedback.innerHTML = `
+                    <div class="font-bold text-sm text-rose-700">❌ Неправильна відповідь ($${val}\\text{ Дж}$).</div>
+                    <p class="mt-1"><strong>Підказка:</strong> Не забудьте перевести $v = 5\\text{ см/с} = 0{.}05\\text{ м/с}$ та $x = 4\\text{ см} = 0{.}04\\text{ м}$ у системи СІ!</p>
+                `;
+            }
+
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuiz();
+            updateSimulator();
+        });
+    </script>
+</body>
+</html>
