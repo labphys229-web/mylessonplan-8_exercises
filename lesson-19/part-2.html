@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Твій помічник в опрацюванні контрольних запитань до § 7. </title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax для формул -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+        body { font-family: 'Montserrat', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Шапка сайту -->
+    <header class="bg-indigo-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <span class="bg-white text-indigo-600 font-bold p-2 rounded-xl shadow text-lg">§ 7</span>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold leading-tight">Механічна енергія</h1>
+                    <p class="text-xs text-indigo-200">Фізика • 8 клас • За підручником «Ранок»</p>
+                </div>
+            </div>
+            <!-- Навігаційні вкладки -->
+            <nav class="flex flex-wrap gap-1 bg-indigo-700/50 p-1.5 rounded-xl backdrop-blur-sm text-sm">
+                <button onclick="switchTab('questions')" id="btn-questions" class="px-3 py-1.5 rounded-lg font-medium transition bg-white text-indigo-700 shadow">Запитання</button>
+                <button onclick="switchTab('preview')" id="btn-preview" class="px-3 py-1.5 rounded-lg font-medium transition text-indigo-100 hover:bg-indigo-600">Перегляд / Симулятор</button>
+                <button onclick="switchTab('trainer')" id="btn-trainer" class="px-3 py-1.5 rounded-lg font-medium transition text-indigo-100 hover:bg-indigo-600">Тест</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Основний контейнер -->
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- Вкладка 1: Контрольні запитання та відповіді за параграфом -->
+        <section id="tab-questions" class="space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h2 class="text-xl font-bold text-slate-900 mb-2">Опрацювання питань до § 7</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Тут наведено чіткі відповіді на контрольні запитання, які суворо спираються на текст параграфа підручника. Розгорніть потрібне питання для ознайомлення.
+                </p>
+            </div>
+
+            <!-- Список питань -->
+            <div class="space-y-4" id="questions-list">
+                <!-- Питання 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(1)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">1. Що означає вираз: «Тіло (або система тіл) має енергію»?</span>
+                        <svg id="icon-1" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-1" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+                        <p>Вираз означає, що тіло здатне виконати роботу завдяки своєму руху або взаємодії з іншими тілами.</p>
+                        <div class="bg-indigo-50/70 p-4 rounded-xl border border-indigo-100 text-indigo-900 text-sm">
+                            <strong>Визначення з параграфа:</strong> Механічна енергія — це фізична величина, яка є мірою руху та взаємодії тіл. Це «запас роботи», яку може виконати тіло внаслідок руху або внаслідок взаємодії.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Питання 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(2)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">2. Назвіть одиницю енергії в СІ.</span>
+                        <svg id="icon-2" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-2" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+                        <p>Одиницею енергії в Міжнародній системі одиниць (СІ) є <strong>джоуль (Дж)</strong> — так само як і одиниця механічної роботи.</p>
+                        <p class="text-xs text-slate-500">[E] = Дж</p>
+                    </div>
+                </div>
+
+                <!-- Питання 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(3)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">3. Наведіть приклади на підтвердження того, що під час виконання роботи енергія тіла змінюється.</span>
+                        <svg id="icon-3" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-3" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Приклад 1 (збивання кеглів):</strong> Куля для боулінгу котиться доріжкою і збиває кеглі. Унаслідок виконаної роботи швидкість руху кулі зменшується.</li>
+                            <li><strong>Приклад 2 (піднімання цеглин):</strong> Коли робітник на будівництві піднімає цеглини проти сили тяжіння, механічна енергія цеглин збільшується.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Питання 4 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(4)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">4. Дайте означення потенціальної енергії.</span>
+                        <svg id="icon-4" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-4" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+                        <div class="bg-indigo-50/70 p-4 rounded-xl border border-indigo-100 text-indigo-900 font-medium">
+                            Потенціальна енергія (\(E_p\)) — це енергія, зумовлена взаємодією тіл або частин тіла.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Питання 5 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(5)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">5. За якою формулою визначають потенціальну енергію тіла, піднятого на висоту h? деформованої пружини?</span>
+                        <svg id="icon-5" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-5" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-4 text-sm sm:text-base leading-relaxed">
+                        <div>
+                            <p class="font-semibold text-slate-900">1. Тіла, піднятого на висоту \(h\):</p>
+                            <p class="text-center my-2 text-lg font-bold text-indigo-600">\(E_p = mgh\)</p>
+                        </div>
+                        <hr class="border-slate-100">
+                        <div>
+                            <p class="font-semibold text-slate-900">2. Пружно деформованої пружини:</p>
+                            <p class="text-center my-2 text-lg font-bold text-indigo-600">\(E_p = \frac{kx^2}{2}\)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Питання 6 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(6)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">6. Чи залежить значення потенціальної енергії піднятого тіла від вибору нульового рівня?</span>
+                        <svg id="icon-6" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-6" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+                        <p><strong>Так, залежить.</strong> Вибір рівня, від якого вимірюється висота \(h\), безпосередньо впливає на значення потенціальної енергії.</p>
+                    </div>
+                </div>
+
+                <!-- Питання 7 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(7)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">7. Дайте означення кінетичної енергії тіла.</span>
+                        <svg id="icon-7" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-7" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+                        <div class="bg-indigo-50/70 p-4 rounded-xl border border-indigo-100 text-indigo-900 font-medium">
+                            Кінетична енергія (\(E_k\)) — це енергія, яка зумовлена рухом тіла і дорівнює половині добутку маси тіла на квадрат швидкості його руху.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Питання 8 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(8)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">8. За якою формулою обчислюють кінетичну енергію тіла?</span>
+                        <svg id="icon-8" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-8" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+                        <p class="text-center my-3 text-xl font-bold text-indigo-600">\(E_k = \frac{mv^2}{2}\)</p>
+                    </div>
+                </div>
+
+                <!-- Питання 9 -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition hover:border-indigo-200">
+                    <button onclick="toggleAccordion(9)" class="w-full text-left p-5 flex justify-between items-center bg-slate-50/50 hover:bg-indigo-50/30 transition">
+                        <span class="font-semibold text-slate-900 pr-4 text-sm sm:text-base">9. Дайте означення повної механічної енергії тіла.</span>
+                        <svg id="icon-9" class="w-5 h-5 text-indigo-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="content-9" class="hidden p-5 border-t border-slate-100 text-slate-700 space-y-3 text-sm sm:text-base leading-relaxed">
+                        <div class="bg-indigo-50/70 p-4 rounded-xl border border-indigo-100 text-indigo-900 font-medium">
+                            Повна механічна енергія тіла — це сума кінетичної та потенціальної енергій тіла: \(E_{\text{повна}} = E_k + E_p\).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Вкладка 2: Попередній перегляд / Інтерактивний симулятор енергії -->
+        <section id="tab-preview" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-1">Інтерактивний симулятор енергії</h2>
+                    <p class="text-sm text-slate-600">Змінюйте параметри повзунками нижче, щоб побачити розрахунок енергії в реальному часі.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Картка 1: Потенціальна енергія піднятого тіла -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4">
+                        <h3 class="font-bold text-indigo-900 text-base">Потенціальна енергія (\(E_p = mgh\))</h3>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Маса тіла (\(m\), кг): <span id="val-m" class="text-indigo-600 font-bold">2</span> кг</label>
+                                <input type="range" min="1" max="50" value="2" id="range-m" oninput="updateSimulation()" class="w-full accent-indigo-600 cursor-pointer">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Висота (\(h\), м): <span id="val-h" class="text-indigo-600 font-bold">5</span> м</label>
+                                <input type="range" min="1" max="30" value="5" id="range-h" oninput="updateSimulation()" class="w-full accent-indigo-600 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-600 text-white p-4 rounded-xl text-center shadow">
+                            <p class="text-xs text-indigo-200 uppercase font-semibold">Результат:</p>
+                            <p class="text-2xl font-bold" id="res-ep">98 Дж</p>
+                        </div>
+                    </div>
+
+                    <!-- Картка 2: Кінетична енергія тіла -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4">
+                        <h3 class="font-bold text-indigo-900 text-base">Кінетична енергія (\(E_k = \frac{mv^2}{2}\))</h3>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Маса тіла (\(m\), кг): <span id="val-mk" class="text-indigo-600 font-bold">4</span> кг</label>
+                                <input type="range" min="1" max="50" value="4" id="range-mk" oninput="updateSimulation()" class="w-full accent-indigo-600 cursor-pointer">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Швидкість (\(v\), м/с): <span id="val-v" class="text-indigo-600 font-bold">6</span> м/с</label>
+                                <input type="range" min="0" max="30" value="6" id="range-v" oninput="updateSimulation()" class="w-full accent-indigo-600 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-600 text-white p-4 rounded-xl text-center shadow">
+                            <p class="text-xs text-indigo-200 uppercase font-semibold">Результат:</p>
+                            <p class="text-2xl font-bold" id="res-ek">72 Дж</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Вкладка 3: Інтерактивний тест (Тренажер) -->
+        <section id="tab-trainer" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-slate-900">Перевірка знань до § 7</h2>
+                    <span id="question-counter" class="text-xs font-semibold px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full">Питання 1 з 5</span>
+                </div>
+                
+                <div id="quiz-container" class="space-y-4"></div>
+
+                <div class="mt-6 flex justify-end">
+                    <button id="next-btn" onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2.5 rounded-xl shadow transition text-sm">
+                        Наступне питання
+                    </button>
+                </div>
+            </div>
+
+            <div id="quiz-results" class="hidden bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center space-y-4">
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">🎉</div>
+                <h3 class="text-2xl font-bold text-slate-900">Тест завершено!</h3>
+                <p id="score-text" class="text-slate-600 text-base">Ви набрали 0 з 5 балів.</p>
+                <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2.5 rounded-xl shadow transition text-sm">
+                    Пройти знову
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Футер -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
+        <p>Створено для учнів 8 класу • Зберігається на GitHub • Фізика § 7</p>
+    </footer>
+
+    <!-- Скрипти додатку -->
+    <script>
+        // Перемикання вкладок
+        function switchTab(tab) {
+            const tabs = {
+                'questions': document.getElementById('tab-questions'),
+                'preview': document.getElementById('tab-preview'),
+                'trainer': document.getElementById('tab-trainer')
+            };
+            const btns = {
+                'questions': document.getElementById('btn-questions'),
+                'preview': document.getElementById('btn-preview'),
+                'trainer': document.getElementById('btn-trainer')
+            };
+
+            for (let key in tabs) {
+                if (key === tab) {
+                    tabs[key].classList.remove('hidden');
+                    btns[key].className = "px-3 py-1.5 rounded-lg font-medium transition bg-white text-indigo-700 shadow";
+                    if (key === 'trainer') loadQuestion();
+                } else {
+                    tabs[key].classList.add('hidden');
+                    btns[key].className = "px-3 py-1.5 rounded-lg font-medium transition text-indigo-100 hover:bg-indigo-600";
+                }
+            }
+        }
+
+        // Акордеон для питань
+        function toggleAccordion(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // Симулятор розрахунків
+        function updateSimulation() {
+            const m = parseFloat(document.getElementById('range-m').value);
+            const h = parseFloat(document.getElementById('range-h').value);
+            document.getElementById('val-m').innerText = m;
+            document.getElementById('val-h').innerText = h;
+            // g = 9.8 м/с²
+            const ep = m * 9.8 * h;
+            document.getElementById('res-ep').innerText = ep.toFixed(1) + " Дж";
+
+            const mk = parseFloat(document.getElementById('range-mk').value);
+            const v = parseFloat(document.getElementById('range-v').value);
+            document.getElementById('val-mk').innerText = mk;
+            document.getElementById('val-v').innerText = v;
+            const ek = (mk * Math.pow(v, 2)) / 2;
+            document.getElementById('res-ek').innerText = ek.toFixed(1) + " Дж";
+        }
+
+        // Ініціалізація симулятора при завантаженні
+        window.onload = function() {
+            updateSimulation();
+        };
+
+        // База даних питань для тренажера
+        const quizData = [
+            {
+                question: "У яких одиницях в системі СІ вимірюється механічна енергія?",
+                options: ["Джоуль (Дж)", "Ват (Вт)", "Ньютон (Н)", "Кілограм (кг)"],
+                correct: 0,
+                rationale: "Одиницею енергії в СІ є джоуль."
+            },
+            {
+                question: "За якою формулою обчислюють потенціальну енергію тіла, піднятого на висоту h?",
+                options: ["E_p = \\frac{mv^2}{2}", "E_p = mgh", "E_p = \\frac{kx^2}{2}", "E_p = FS"],
+                correct: 1,
+                rationale: "Потенціальна енергія піднятого тіла: E_p = mgh."
+            },
+            {
+                question: "Що є мірою зміни енергії тіла під час виконання механічної роботи?",
+                options: ["Швидкість руху тіла", "Механічна робота", "Маса тіла", "Жорсткість пружини"],
+                correct: 1,
+                rationale: "Механічна робота є мірою зміни енергії тіла."
+            },
+            {
+                question: "За якою формулою обчислюють кінетичну енергію тіла?",
+                options: ["E_k = mgh", "E_k = \\frac{kx^2}{2}", "E_k = \\frac{mv^2}{2}", "E_k = mv"],
+                correct: 2,
+                rationale: "Кінетична енергія: E_k = mv^2 / 2."
+            },
+            {
+                question: "Чому дорівнює повна механічна енергія тіла?",
+                options: ["Кінетичній енергії", "Потенціальній енергії", "Сумі кінетичної і потенціальної енергій", "Добутку енергій"],
+                correct: 2,
+                rationale: "Повна енергія — це сума кінетичної та потенціальної енергій."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        function loadQuestion() {
+            answered = false;
+            document.getElementById('next-btn').classList.add('hidden');
+            const q = quizData[currentQuestionIndex];
+            document.getElementById('question-counter').innerText = `Питання ${currentQuestionIndex + 1} з ${quizData.length}`;
+            
+            let html = `<p class="font-semibold text-slate-800 text-base sm:text-lg mb-4">${q.question}</p>`;
+            html += `<div class="space-y-3">`;
+            q.options.forEach((opt, idx) => {
+                let formattedOpt = opt.replace(/E_p/g, '<i>E<sub>p</sub></i>')
+                                     .replace(/E_k/g, '<i>E<sub>k</sub></i>')
+                                     .replace(/\\frac\{mv\^2\}\{2\}/g, '<i>mv</i>²/2')
+                                     .replace(/\\frac\{kx\^2\}\{2\}/g, '<i>kx</i>²/2')
+                                     .replace(/FS/g, '<i>FS</i>');
+                html += `<button onclick="selectOption(${idx})" id="opt-${idx}" class="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition font-medium text-slate-700 text-sm sm:text-base">${formattedOpt}</button>`;
+            });
+            html += `</div>`;
+            document.getElementById('quiz-container').innerHTML = html;
+        }
+
+        function selectOption(selectedIdx) {
+            if (answered) return;
+            answered = true;
+            const q = quizData[currentQuestionIndex];
+            const correctIdx = q.correct;
+
+            const buttons = document.querySelectorAll('#quiz-container button');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correctIdx) {
+                    btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                } else if (idx === selectedIdx) {
+                    btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                }
+            });
+
+            if (selectedIdx === correctIdx) score++;
+
+            let rationaleHtml = `<div class="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-600"><strong>Пояснення:</strong> ${q.rationale}</div>`;
+            document.getElementById('quiz-container').insertAdjacentHTML('beforeend', rationaleHtml);
+
+            if (currentQuestionIndex < quizData.length - 1) {
+                document.getElementById('next-btn').innerText = "Наступне питання";
+                document.getElementById('next-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('next-btn').innerText = "Переглянути результат";
+                document.getElementById('next-btn').classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').parentElement.parentElement.classList.add('hidden');
+            const resDiv = document.getElementById('quiz-results');
+            resDiv.classList.remove('hidden');
+            document.getElementById('score-text').innerText = `Ви набрали ${score} з ${quizData.length} балів. Чудовий результат!`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('quiz-container').parentElement.parentElement.classList.remove('hidden');
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>
+```eof
